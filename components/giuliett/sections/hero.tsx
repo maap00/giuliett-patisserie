@@ -74,7 +74,7 @@ export function Hero() {
               </PrimaryAction>
 
               <p className="mt-5 text-center text-[12px] tracking-[0.06em] text-[#9C8065] lg:text-left">
-                {CONTACT.city} · Llevamos hasta tu puerta
+                {CONTACT.city} 
               </p>
             </Reveal>
           </div>
