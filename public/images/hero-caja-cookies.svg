@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 1050" fill="none">
+  <rect width="840" height="1050" fill="#FFF8E9"/>
+  <defs>
+    <pattern id="cb" width="48" height="48" patternUnits="userSpaceOnUse">
+      <rect width="24" height="24" fill="#BFB4DC" opacity="0.35"/>
+      <rect x="24" y="24" width="24" height="24" fill="#BFB4DC" opacity="0.35"/>
+    </pattern>
+  </defs>
+  <rect x="56" y="72" width="728" height="906" fill="url(#cb)" opacity="0.45"/>
+  <rect x="96" y="112" width="648" height="826" fill="#FFF8E9"/>
+  <ellipse cx="420" cy="880" rx="220" ry="28" fill="#51375C" opacity="0.06"/>
+  <rect x="200" y="340" width="440" height="320" rx="8" fill="#E1B0AC" opacity="0.25"/>
+  <rect x="220" y="360" width="400" height="280" rx="6" fill="#FFF8E9" stroke="#BFB4DC" stroke-width="2"/>
+  <circle cx="320" cy="480" r="36" fill="#BFB4DC" opacity="0.5"/>
+  <circle cx="420" cy="500" r="36" fill="#E1B0AC" opacity="0.55"/>
+  <circle cx="520" cy="480" r="36" fill="#BFB4DC" opacity="0.45"/>
+  <path d="M280 620 Q420 580 560 620" stroke="#9C8065" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <text x="420" y="760" text-anchor="middle" font-family="Georgia, serif" font-size="13" letter-spacing="0.28em" fill="#51375C" opacity="0.35">FOTOGRAFÍA DE PRODUCTO</text>
+</svg>
