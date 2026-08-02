@@ -3,6 +3,7 @@ import { DottedX } from '../atoms'
 import { ArtFounderWaving, IconInstagram, IconMail, IconPhone } from '../line-art'
 import { Reveal } from '../reveal'
 import { SectionLockup } from '../section-lockup'
+import Image from 'next/image'
 
 /**
  * 09 · FOOTER — cero relleno. Sin newsletter, sin misión, sin mapa
@@ -61,7 +62,22 @@ export function Footer() {
 
           {/* La fundadora saludando, recortada por el borde inferior. */}
           <Reveal delay={160} className="relative w-[150px] shrink-0 overflow-hidden md:w-[180px]">
-            <ArtFounderWaving className="-mb-12 h-auto w-full text-primary" />
+            <figure className="relative mx-auto w-full max-w-[480px] lg:max-w-none">
+                                    <div
+                                      className="relative overflow-hidden rounded-[32px] bg-[#BFB4DC]/20 shadow-[0_20px_48px_-20px_rgb(81_55_92/0.22)]"
+                                      style={{ aspectRatio: '2 / 5' }}
+                                    >
+                                      <Image
+                                        src="/images/giu_character.png"
+                                        alt="Caja de cookies artesanales con el logo de Giuliett sobre mármol blanco"
+                                        fill
+                                        priority
+                                        sizes="(min-width: 1024px) 54vw, calc(100vw - 40px)"
+                                        className="object-cover"
+                                      />
+                                    </div>
+                                    <figcaption className="sr-only">Pastelería francesa artesanal Giuliett</figcaption>
+                                  </figure>
           </Reveal>
         </div>
 

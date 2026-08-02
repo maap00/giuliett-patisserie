@@ -3,6 +3,7 @@ import { DottedX } from '../atoms'
 import { ArtFounderSeated } from '../line-art'
 import { Reveal } from '../reveal'
 import { Section } from '../section'
+import Image from 'next/image'
 
 /**
  * 07 · CÓMO TRABAJAMOS — desactiva la objeción del esfuerzo.
@@ -50,7 +51,22 @@ export function Process() {
 
         {/* La fundadora: una sola aparición por pantalla, recortada por el borde. */}
         <Reveal delay={160} className="relative w-full max-w-[300px] shrink-0 lg:max-w-[340px]">
-          <ArtFounderSeated className="mx-auto h-auto w-full text-primary" />
+           <figure className="relative mx-auto w-full max-w-[480px] lg:max-w-none">
+                        <div
+                          className="relative overflow-hidden rounded-[32px] bg-[#BFB4DC]/20 shadow-[0_20px_48px_-20px_rgb(81_55_92/0.22)]"
+                          style={{ aspectRatio: '4 / 5' }}
+                        >
+                          <Image
+                            src="/images/gui_wine.png"
+                            alt="Caja de cookies artesanales con el logo de Giuliett sobre mármol blanco"
+                            fill
+                            priority
+                            sizes="(min-width: 1024px) 54vw, calc(100vw - 40px)"
+                            className="object-cover"
+                          />
+                        </div>
+                        <figcaption className="sr-only">Pastelería francesa artesanal Giuliett</figcaption>
+                      </figure>
         </Reveal>
       </div>
     </Section>
