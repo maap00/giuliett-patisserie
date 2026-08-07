@@ -1,7 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Ephesis, Poppins } from 'next/font/google'
-import { MobileBottomNav } from '@/components/giuliett/mobile-bottom-nav'
+import { GlobalNavigation } from '@/components/giuliett/mobile-bottom-nav'
 import './globals.css'
 
 const poppins = Poppins({
@@ -53,8 +53,8 @@ export default function RootLayout({
   return (
     <html lang="es-AR" className={`${poppins.variable} ${ephesis.variable} bg-background`}>
       <body className="bg-background pb-[calc(92px+env(safe-area-inset-bottom))] font-sans antialiased md:pb-0">
+        <GlobalNavigation />
         {children}
-        <MobileBottomNav />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

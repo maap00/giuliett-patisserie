@@ -2,9 +2,9 @@ import { CONTACT, WA_GENERAL, waLink } from '@/lib/giuliett'
 import { PrimaryAction } from '../atoms'
 import { IconWhatsApp } from '../line-art'
 import { Reveal } from '../reveal'
+import { HeroCarousel } from '../hero-carousel'
 import { ScallopAwning } from '../scallop-awning'
 import { SectionLockup } from '../section-lockup'
-import Image from 'next/image'
 
 /**
  * 01 · HERO
@@ -23,33 +23,20 @@ export function Hero() {
         </Reveal>
 
         <div className="mt-10 flex flex-1 flex-col gap-10 sm:mt-12 lg:mt-14 lg:flex-row lg:items-center lg:gap-16 xl:gap-20">
-           <Reveal delay={180} className="w-full">
-              <p className="mt-5 text-center text-[13px] tracking-[0.18em] text-[#51375C]/75 uppercase lg:text-left">
-                Empresas · Cafeterías · Eventos
-              </p>
-            </Reveal>
-          
           <Reveal className="w-full lg:w-[54%]" delay={60}>
-            <figure className="relative mx-auto w-full max-w-[480px] lg:max-w-none">
-              <div
-                className="relative overflow-hidden rounded-[32px] bg-[#BFB4DC]/20 shadow-[0_20px_48px_-20px_rgb(81_55_92/0.22)]"
-                style={{ aspectRatio: '4 / 5' }}
-              >
-                <Image
-                  src="/images/producto-mesas.png"
-                  alt="Caja de cookies artesanales con el logo de Giuliett sobre mármol blanco"
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 54vw, calc(100vw - 40px)"
-                  className="object-cover"
-                />
-              </div>
-              <figcaption className="sr-only">Pastelería francesa artesanal Giuliett</figcaption>
-            </figure>
+            <div className="mx-auto w-full max-w-[480px] lg:max-w-none">
+              <HeroCarousel />
+            </div>
           </Reveal>
 
           <div className="flex w-full flex-col items-center lg:w-[46%] lg:items-start">
-            <Reveal delay={120} className="w-full">
+            <Reveal delay={180} className="w-full">
+              <p className="text-center text-[13px] uppercase tracking-[0.18em] text-[#51375C]/75 lg:text-left">
+                Empresas · Cafeterías · Eventos
+              </p>
+            </Reveal>
+
+            <Reveal delay={120} className="mt-8 w-full">
               <SectionLockup
                 as="h1"
                 caps="Pastelería"
@@ -86,7 +73,7 @@ export function Hero() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Escribinos por WhatsApp"
-        className="fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#51375C] text-[#FFF8E9] shadow-[0_12px_32px_-10px_rgb(81_55_92/0.45)] transition-[transform,box-shadow] duration-300 ease-out hover:scale-[1.03] active:scale-[0.97] sm:bottom-8 sm:right-8 lg:hidden"
+        className="fixed bottom-[calc(92px+env(safe-area-inset-bottom))] right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#51375C] text-[#FFF8E9] shadow-[0_12px_32px_-10px_rgb(81_55_92/0.45)] transition-[transform,box-shadow] duration-300 ease-out hover:scale-[1.03] active:scale-[0.97] sm:right-8 lg:hidden"
       >
         <IconWhatsApp className="h-6 w-6" strokeWidth={1.7} />
       </a>
