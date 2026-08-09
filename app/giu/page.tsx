@@ -1,22 +1,153 @@
-import { PageIntro } from '@/components/giuliett/page-intro'
-import { Manifesto } from '@/components/giuliett/sections/manifesto'
-import { Reasons } from '@/components/giuliett/sections/reasons'
-import { SocialProof } from '@/components/giuliett/sections/social-proof'
+import Image from 'next/image'
+import { Reveal } from '@/components/giuliett/reveal'
+import { Section } from '@/components/giuliett/section'
+
+const teamMembers = [
+  {
+    name: 'Giu',
+    role: 'Fundadora & Chef Pastelera',
+    description:
+      'Fundadora de Giuliett y formada en École Ferrandi Paris. Lidera el desarrollo creativo de la marca y supervisa cada creación para que refleje la calidad, la estética y la esencia de Giuliett.',
+  },
+  {
+    name: 'Rai',
+    role: 'Administración & Gestión General',
+    description:
+      'Es quien coordina el funcionamiento diario de Giuliett, organiza los procesos internos y acompaña al equipo para que cada detalle esté bajo control.',
+  },
+  {
+    name: 'Juli',
+    role: 'Responsable de cocina',
+    description: 'Lidera la producción diaria, cuidando cada detalle y manteniendo la calidad que caracteriza a Giuliett.',
+  },
+  {
+    name: 'Jime',
+    role: 'Diseño gráfico & Producción',
+    description: 'Da vida a la identidad visual de la marca y acompaña al equipo de cocina en cada creación.',
+  },
+  {
+    name: 'Ana',
+    role: 'Marketing & Community Manager',
+    description: 'Es quien comunica la esencia de Giuliett y crea el contenido que compartimos todos los días.',
+  },
+  {
+    name: 'Ceci',
+    role: 'Ingeniera Comercial & Asesora',
+    description: 'Acompaña el crecimiento de la marca, aportando una mirada estratégica y asesorando a nuestros clientes.',
+  },
+] as const
 
 export default function GiuPage() {
   return (
     <main>
-      <PageIntro
-        eyebrow="Giu"
-        caps="Técnica francesa,"
-        script="alma mendocina"
-        description="Detrás de Giuliett hay una forma de hacer las cosas: con oficio, escucha y atención por cada detalle."
-        image="/images/Axx.jpg"
-        imageAlt="La fundadora de Giuliett Pâtisserie"
-      />
-      <Manifesto />
-      <Reasons />
-      <SocialProof />
+      <HistorySection />
+      <TeamSection />
     </main>
+  )
+}
+
+function HistorySection() {
+  return (
+    <Section tone="cream" layered={false} className="pb-24 pt-12 md:pb-[140px] md:pt-20" aria-labelledby="historia-titulo">
+      <div className="mx-auto max-w-[1040px]">
+        <Reveal>
+          <h1 id="historia-titulo" className="text-center text-[34px] font-light text-primary md:text-[48px]">
+            Nuestra historia
+          </h1>
+        </Reveal>
+
+        <div className="mt-12 flex flex-col gap-16 md:mt-16 md:gap-24">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:gap-16">
+            <Reveal>
+              <PendingPhoto label="Fotografía pendiente: Giu cocinando" ratio="4/5" />
+            </Reveal>
+            <Reveal delay={100}>
+              <p className="max-w-[42ch] text-[16px] leading-[1.75] text-muted-foreground md:text-[17px]">
+                Giuliett nació en 2017, cuando con tan solo 17 años decidí convertir mi pasión por la pastelería en un sueño.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-center lg:gap-16">
+            <Reveal className="lg:order-2">
+              <PendingPhoto label="Fotografía pendiente: formación de Giu en París" ratio="4/3" />
+            </Reveal>
+            <Reveal delay={100} className="lg:order-1 lg:justify-self-end">
+              <p className="max-w-[42ch] text-[16px] leading-[1.75] text-muted-foreground md:text-[17px]">
+                Años después, viajé a París para estudiar en la prestigiosa École Ferrandi Paris y, tras finalizar mi
+                formación, me quedé tres años trabajando en numerosas pastelerías y perfeccionándome.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:gap-16">
+            <Reveal>
+              <PendingPhoto label="Fotografía pendiente: École Ferrandi Paris" ratio="4/5" />
+            </Reveal>
+            <Reveal delay={100}>
+              <p className="max-w-[42ch] text-[16px] leading-[1.75] text-muted-foreground md:text-[17px]">
+                Hoy, de regreso en Argentina, seguimos creciendo y creando experiencias dulces donde la técnica francesa,
+                el diseño y la pasión por los detalles se unen en cada elaboración.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+function TeamSection() {
+  return (
+    <Section tone="white" aria-labelledby="equipo-titulo">
+      <div className="mx-auto max-w-[1040px]">
+        <Reveal>
+          <PendingPhoto label="Fotografía grupal pendiente del Equipo Giuliett" ratio="16/9" />
+        </Reveal>
+        <Reveal delay={100}>
+          <h2 id="equipo-titulo" className="mt-14 text-center text-[34px] font-light text-primary md:mt-20 md:text-[48px]">
+            El equipo
+          </h2>
+        </Reveal>
+
+        <div className="mt-14 flex flex-col gap-20 md:mt-20 md:gap-28">
+          {teamMembers.map((member, index) => (
+            <article key={member.name} className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-16">
+              <Reveal className={index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'} delay={40}>
+                <PendingPhoto label={`Fotografía pendiente: ${member.name}`} ratio="4/5" />
+              </Reveal>
+              <div className={index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}>
+                <Reveal delay={120}>
+                  <h3 className="text-[28px] font-light text-primary md:text-[34px]">{member.name}</h3>
+                  <p className="tracked mt-3 text-[10px] font-medium text-muted-foreground">{member.role}</p>
+                </Reveal>
+                <Reveal delay={180}>
+                  <p className="mt-6 max-w-[42ch] text-[15px] leading-[1.75] text-muted-foreground md:text-[16px]">
+                    {member.description}
+                  </p>
+                </Reveal>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+function PendingPhoto({ label, ratio }: { label: string; ratio: '4/5' | '4/3' | '16/9' }) {
+  return (
+    <figure className="group relative overflow-hidden rounded-lg bg-lilac-soft transition-transform duration-[350ms] ease-out lg:hover:-translate-y-1" style={{ aspectRatio: ratio.replace('/', ' / ') }}>
+      <Image
+        src="/placeholder-user.jpg"
+        alt={label}
+        fill
+        sizes="(min-width: 1024px) 520px, calc(100vw - 48px)"
+        className="object-cover p-[20%] opacity-65"
+      />
+      <figcaption className="absolute inset-x-0 bottom-0 bg-background/88 px-4 py-3 text-center text-[11px] text-muted-foreground backdrop-blur-sm">
+        {label}
+      </figcaption>
+    </figure>
   )
 }
