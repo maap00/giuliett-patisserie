@@ -1,52 +1,42 @@
-import { CONTACT, WA_GENERAL, waLink } from '@/lib/giuliett'
-import { PageIntro } from '@/components/giuliett/page-intro'
-import { PrimaryAction } from '@/components/giuliett/atoms'
-import { Footer } from '@/components/giuliett/sections/footer'
-import { IconInstagram, IconMail, IconPhone } from '@/components/giuliett/line-art'
+import Image from 'next/image'
+import { ContactForm } from '@/components/giuliett/contact-form'
+import { Reveal } from '@/components/giuliett/reveal'
 import { Section } from '@/components/giuliett/section'
-
-const contactItems = [
-  { label: 'WhatsApp', value: CONTACT.phoneDisplay, href: `tel:+${CONTACT.phoneRaw}`, Icon: IconPhone },
-  { label: 'Email', value: CONTACT.email, href: `mailto:${CONTACT.email}`, Icon: IconMail },
-  { label: 'Instagram', value: CONTACT.instagramHandle, href: CONTACT.instagramUrl, Icon: IconInstagram, external: true },
-]
+import { Footer } from '@/components/giuliett/sections/footer'
 
 export default function ContactoPage() {
   return (
     <main>
-      <PageIntro
-        eyebrow="Contacto"
-        caps="Hablemos de tu"
-        script="próximo pedido"
-        description="Contanos qué estás imaginando. Respondemos el mismo día para empezar a darle forma."
-        image="/images/hero-caja-cookies.png"
-        imageAlt="Caja Giuliett con cookies artesanales"
-      />
-      <Section tone="lilac-soft" aria-labelledby="canales-titulo">
-        <div className="mx-auto max-w-xl">
-          <h2 id="canales-titulo" className="tracked text-center text-[13px] font-medium text-primary">
-            Encontranos acá
-          </h2>
-          <ul className="mt-10 flex flex-col gap-4">
-            {contactItems.map(({ label, value, href, Icon, external }) => (
-              <li key={label}>
-                <a
-                  href={href}
-                  {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className="flex min-h-[68px] items-center gap-4 rounded-md bg-surface px-5 text-primary shadow-[var(--shadow-giuliett)] transition-transform duration-200 ease-out hover:-translate-y-0.5"
-                >
-                  <Icon className="h-5 w-5 shrink-0" />
-                  <span className="flex min-w-0 flex-col gap-1">
-                    <span className="text-[12px] text-muted-foreground">{label}</span>
-                    <span className="truncate text-[15px] font-medium">{value}</span>
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-          <PrimaryAction href={waLink(WA_GENERAL)} className="mt-10 w-full">
-            Escribinos por WhatsApp
-          </PrimaryAction>
+      <section className="relative overflow-hidden bg-primary" aria-labelledby="contacto-titulo">
+        <div className="relative h-[280px] sm:h-[340px] md:h-[420px]">
+          <Image
+            src="/images/cierre-mesa-dulce.png"
+            alt="Mesa dulce con macarons, tartas y cookies sobre stands de cerámica lila"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div aria-hidden="true" className="absolute inset-0 bg-primary/45" />
+          <div className="relative mx-auto flex h-full w-full max-w-[1200px] items-end px-6 pb-10 md:px-8 md:pb-16">
+            <h1 id="contacto-titulo" className="max-w-[17ch] text-balance text-[30px] font-light leading-[1.2] text-primary-foreground sm:text-[38px] md:text-[52px]">
+              Contanos qué necesitás
+              <br />y te ayudamos a hacerlo realidad.
+            </h1>
+          </div>
+        </div>
+      </section>
+
+      <Section tone="cream" className="pb-24 pt-20 md:pb-[140px] md:pt-28" aria-labelledby="consulta-titulo">
+        <div className="mx-auto max-w-[640px]">
+          <Reveal>
+            <p id="consulta-titulo" className="text-balance text-center text-[18px] leading-[1.65] text-primary md:text-[21px]">
+              Cada pedido es único. Contanos qué estás imaginando y nos ponemos en contacto con vos.
+            </p>
+          </Reveal>
+          <Reveal delay={100} className="mt-14 md:mt-16">
+            <ContactForm />
+          </Reveal>
         </div>
       </Section>
       <Footer />

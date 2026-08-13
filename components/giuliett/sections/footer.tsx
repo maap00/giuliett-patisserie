@@ -1,92 +1,64 @@
+import Image from 'next/image'
 import { CONTACT } from '@/lib/giuliett'
-import { DottedX } from '../atoms'
-import { ArtFounderWaving, IconInstagram, IconMail, IconPhone } from '../line-art'
+import { IconInstagram, IconMail, IconPhone } from '../line-art'
 import { Reveal } from '../reveal'
 import { SectionLockup } from '../section-lockup'
-import Image from 'next/image'
 
-/**
- * 09 · FOOTER — cero relleno. Sin newsletter, sin misión, sin mapa
- * del sitio. La marca no tiene treinta páginas; fingirlo la haría
- * parecer más chica, no más grande.
- */
+const FOOTER_EMAIL = 'hola@giuliettpatisserie.com'
+
+const contactLinks = [
+  { label: CONTACT.phoneDisplay, href: `tel:+${CONTACT.phoneRaw}`, Icon: IconPhone, external: false },
+  { label: FOOTER_EMAIL, href: `mailto:${FOOTER_EMAIL}`, Icon: IconMail, external: false },
+  { label: CONTACT.instagramHandle, href: CONTACT.instagramUrl, Icon: IconInstagram, external: true },
+] as const
+
+/** Footer editorial, shown with the contact form. */
 export function Footer() {
   return (
-    <footer className="relative -mt-8 rounded-t-xl bg-lilac-deep pb-28 pt-20 md:pb-14 md:pt-24">
-      <div className="mx-auto w-full max-w-[1200px] px-6 md:px-8">
-        <div className="flex flex-col items-center gap-10 md:flex-row md:items-end md:justify-between md:gap-12">
-          <div className="flex flex-col items-center md:items-start">
-            <Reveal>
-              <SectionLockup
-                caps="Comunicate con"
-                script="Giuliett"
-                as="h2"
-                className="md:items-start md:text-left"
-              />
-            </Reveal>
+    <footer className="overflow-hidden bg-lilac py-16 md:py-0">
+      <div className="mx-auto flex min-h-[360px] w-full max-w-[1200px] flex-col items-center gap-10 px-6 md:min-h-[340px] md:flex-row md:items-end md:justify-between md:gap-12 md:px-8">
+        <div className="flex w-full flex-col items-center pt-2 text-center md:max-w-[620px] md:items-start md:py-16 md:text-left">
+          <Reveal>
+            <SectionLockup
+              caps="Comunicate con"
+              script="Giuliett"
+              as="h2"
+              className="md:items-start md:text-left"
+              capsClassName="text-[18px] md:text-[24px]"
+              scriptClassName="text-[44px] md:text-[62px]"
+            />
+          </Reveal>
 
-            <Reveal delay={80}>
-              <ul className="mt-8 flex flex-col items-center gap-4 md:items-start">
-                <li>
+          <Reveal delay={100}>
+            <ul className="mt-9 flex flex-col items-start gap-3.5 md:mt-10">
+              {contactLinks.map(({ label, href, Icon, external }) => (
+                <li key={label}>
                   <a
-                    href={`tel:+${CONTACT.phoneRaw}`}
-                    className="underline-write inline-flex min-h-[44px] items-center gap-3 text-[15px] text-primary opacity-70 transition-opacity duration-200 hover:opacity-100"
+                    href={href}
+                    {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    className="group inline-flex min-h-[48px] items-center gap-3 text-[15px] text-primary transition-opacity duration-200 hover:opacity-70"
                   >
-                    <IconPhone className="h-[18px] w-[18px] shrink-0" />
-                    {CONTACT.phoneDisplay}
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/55 transition-colors duration-200 group-hover:bg-primary group-hover:text-primary-foreground">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <span className="font-medium">{label}</span>
                   </a>
                 </li>
-                <li>
-                  <a
-                    href={`mailto:${CONTACT.email}`}
-                    className="underline-write inline-flex min-h-[44px] items-center gap-3 break-all text-[15px] text-primary opacity-70 transition-opacity duration-200 hover:opacity-100"
-                  >
-                    <IconMail className="h-[18px] w-[18px] shrink-0" />
-                    {CONTACT.email}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={CONTACT.instagramUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline-write inline-flex min-h-[44px] items-center gap-3 text-[15px] text-primary opacity-70 transition-opacity duration-200 hover:opacity-100"
-                  >
-                    <IconInstagram className="h-[18px] w-[18px] shrink-0" />
-                    {CONTACT.instagramHandle}
-                  </a>
-                </li>
-              </ul>
-            </Reveal>
-          </div>
-
-          {/* La fundadora saludando, recortada por el borde inferior. */}
-          <Reveal delay={160} className="relative w-[150px] shrink-0 overflow-hidden md:w-[180px]">
-            <figure className="relative mx-auto w-full max-w-[480px] lg:max-w-none">
-                                    <div
-                                      className="relative overflow-hidden rounded-[32px] bg-[#BFB4DC]/20 shadow-[0_20px_48px_-20px_rgb(81_55_92/0.22)]"
-                                      style={{ aspectRatio: '2 / 5' }}
-                                    >
-                                      <Image
-                                        src="/images/giu_character.png"
-                                        alt="Caja de cookies artesanales con el logo de Giuliett sobre mármol blanco"
-                                        fill
-                                        priority
-                                        sizes="(min-width: 1024px) 54vw, calc(100vw - 40px)"
-                                        className="object-cover"
-                                      />
-                                    </div>
-                                    <figcaption className="sr-only">Pastelería francesa artesanal Giuliett</figcaption>
-                                  </figure>
+              ))}
+            </ul>
           </Reveal>
         </div>
 
-        <DottedX className="mt-12 opacity-60" />
-
-        <div className="mt-6 flex flex-col items-center gap-1.5 text-[12px] text-primary/60 md:flex-row md:justify-between">
-          <p>{CONTACT.city}</p>
-          <p>© {new Date().getFullYear()} Giuliett Pâtisserie</p>
-        </div>
+        <Reveal delay={160} className="relative flex w-full max-w-[260px] justify-center self-end md:max-w-[340px] md:justify-end">
+          <Image
+            src="/images/giu-footer.png"
+            alt="Ilustración de Giu, chef pastelera de Giuliett"
+            width={4500}
+            height={4500}
+            sizes="(min-width: 768px) 340px, 260px"
+            className="h-auto w-full object-contain"
+          />
+        </Reveal>
       </div>
     </footer>
   )
