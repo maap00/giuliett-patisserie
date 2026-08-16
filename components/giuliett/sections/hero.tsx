@@ -5,6 +5,7 @@ import { Reveal } from '../reveal'
 import { HeroCarousel } from '../hero-carousel'
 import { ScallopAwning } from '../scallop-awning'
 import { SectionLockup } from '../section-lockup'
+import { Logo } from '../logo'
 
 /**
  * 01 · HERO
@@ -14,11 +15,11 @@ import { SectionLockup } from '../section-lockup'
 export function Hero() {
   return (
     <section id="inicio" className="relative flex min-h-svh flex-col bg-[#FFF8E9] text-[#51375C]">
-      <ScallopAwning className="text-[#BFB4DC]" />
-      <CheckerboardBand />
+      {/* <ScallopAwning className="text-[#BFB4DC]" /> */}
+      {/* <CheckerboardBand /> */}
 
       <div className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col px-5 pb-10 pt-10 sm:px-8 sm:pb-16 sm:pt-12 lg:px-10 lg:pb-20 lg:pt-14">
-        <Reveal className="flex justify-center lg:justify-start">
+        <Reveal className="flex justify-center lg:justify-center">
           <Logotype />
         </Reveal>
 
@@ -83,11 +84,12 @@ export function Hero() {
 
 function Logotype() {
   return (
-    <div className="flex flex-col items-center lg:items-start">
-      <span className="font-script text-[48px] leading-none text-[#51375C] sm:text-[56px] lg:text-[64px]">
+    <div className="flex flex-col justify-center items-center lg:justify-center">
+      {/* <span className="font-script text-[48px] leading-none text-[#51375C] sm:text-[56px] lg:text-[64px]">
         Giuliett
       </span>
-      <span className="tracked mt-2.5 text-[10px] font-medium text-[#9C8065] sm:text-[11px]">Pâtisserie</span>
+      <span className="tracked mt-2.5 text-[10px] font-medium text-[#9C8065] sm:text-[11px]">Pâtisserie</span> */}
+      <Logo/>
     </div>
   )
 }

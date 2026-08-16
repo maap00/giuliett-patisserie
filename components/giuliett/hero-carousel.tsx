@@ -11,12 +11,50 @@ type DragState = {
   startScrollLeft: number
 }
 
+type CarouselSlide = {
+  id?: string
+  image: string
+  alt: string
+  text?: string
+  label?: string
+  script?: string
+}
+
+type HeroCarouselProps = {
+  /** Slides opcionales para reutilizar el gesto de carrusel fuera del hero. */
+  slides?: readonly CarouselSlide[]
+  /** Mantiene la proporción de la fotografía que el carrusel reemplaza. */
+  ratio?: '4/5' | '16/9' | '4/3' | '1/1'
+  sizes?: string
+  className?: string
+  showProductButton?: boolean
+  showIndicators?: boolean
+  ariaLabel?: string
+}
+
+const productSlides: readonly CarouselSlide[] = PRODUCTS.map((product) => ({
+  id: product.id,
+  image: product.image,
+  alt: product.alt,
+  label: product.label,
+  script: product.script,
+}))
+
 /**
  * Native horizontal scrolling gives touch the same direct feel as an image
  * post. Pointer handling is limited to a mouse so mobile keeps its browser
  * scrolling physics and scroll snap settles every gesture naturally.
  */
-export function HeroCarousel() {
+export function HeroCarousel({
+  slides,
+  ratio = '4/5',
+  sizes = '(min-width: 1024px) 54vw, calc(100vw - 40px)',
+  className,
+  showProductButton = true,
+  showIndicators = true,
+  ariaLabel = 'Productos Giuliett',
+}: HeroCarouselProps) {
+  const carouselSlides = slides ?? productSlides
   const viewportRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<DragState | null>(null)
   const animationFrame = useRef<number | null>(null)
@@ -28,7 +66,7 @@ export function HeroCarousel() {
     if (!viewport) return
 
     const nextIndex = Math.round(viewport.scrollLeft / viewport.clientWidth)
-    setActiveIndex(Math.min(PRODUCTS.length - 1, Math.max(0, nextIndex)))
+    setActiveIndex(Math.min(carouselSlides.length - 1, Math.max(0, nextIndex)))
   }
 
   const handleScroll = () => {
@@ -80,7 +118,7 @@ export function HeroCarousel() {
         ref={viewportRef}
         role="region"
         aria-roledescription="carrusel"
-        aria-label="Productos Giuliett"
+        aria-label={ariaLabel}
         onScroll={handleScroll}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -91,50 +129,60 @@ export function HeroCarousel() {
           'touch-pan-x select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
           'shadow-[0_20px_48px_-20px_rgb(81_55_92/0.22)]',
           dragging ? 'cursor-grabbing' : 'cursor-grab',
+          className,
         )}
       >
-        {PRODUCTS.map((product, index) => (
+        {carouselSlides.map((slide, index) => (
           <figure
-            key={product.id}
+            key={slide.id ?? slide.image}
             role="group"
             aria-roledescription="diapositiva"
-            aria-label={`${index + 1} de ${PRODUCTS.length}: ${product.label} ${product.script}`}
+            aria-label={`${index + 1} de ${carouselSlides.length}${slide.label ? `: ${slide.label}${slide.script ? ` ${slide.script}` : ''}` : ''}`}
             className="relative min-w-full snap-center"
           >
-            <div className="relative aspect-[4/5]">
+            <div className="relative" style={{ aspectRatio: ratio.replace('/', ' / ') }}>
               <Image
-                src={product.image}
-                alt={product.alt}
+                src={slide.image}
+                alt={slide.alt}
                 fill
                 priority={index === 0}
-                sizes="(min-width: 1024px) 54vw, calc(100vw - 40px)"
+                sizes={sizes}
                 draggable={false}
                 className="object-cover"
               />
             </div>
-            <button
-              type="button"
-              aria-label={`Ver producto: ${product.label}`}
-              className="absolute bottom-4 left-1/2 min-h-[40px] -translate-x-1/2 rounded-full bg-[#FFF8E9]/82 px-5 text-[12px] font-medium text-[#51375C] shadow-[0_8px_20px_-10px_rgb(63_42_80/0.35)] backdrop-blur-md transition-colors duration-200 hover:bg-[#FFF8E9]"
-            >
-              Ver producto
-            </button>
+            {slide.text ? (
+              <figcaption className="absolute bottom-3 left-3 right-3 truncate rounded-sm bg-white/82 px-3 py-2 text-center text-[12px] font-medium text-primary backdrop-blur-sm">
+                {slide.text}
+              </figcaption>
+            ) : null}
+            {showProductButton ? (
+              <button
+                type="button"
+                aria-label={`Ver producto: ${slide.label}`}
+                className="absolute bottom-4 left-1/2 min-h-[40px] -translate-x-1/2 rounded-full bg-[#FFF8E9]/82 px-5 text-[12px] font-medium text-[#51375C] shadow-[0_8px_20px_-10px_rgb(63_42_80/0.35)] backdrop-blur-md transition-colors duration-200 hover:bg-[#FFF8E9]"
+              >
+                Ver producto
+              </button>
+            ) : null}
           </figure>
         ))}
       </div>
 
-      <div className="mt-4 flex justify-center gap-1.5" aria-label={`Producto ${activeIndex + 1} de ${PRODUCTS.length}`}>
-        {PRODUCTS.map((product, index) => (
-          <span
-            key={product.id}
-            aria-hidden="true"
-            className={cn(
-              'h-1.5 rounded-full bg-[#51375C] transition-[opacity,width] duration-200 ease-out',
-              index === activeIndex ? 'w-4 opacity-100' : 'w-1.5 opacity-30',
-            )}
-          />
-        ))}
-      </div>
+      {showIndicators ? (
+        <div className="mt-4 flex justify-center gap-1.5" aria-label={`Producto ${activeIndex + 1} de ${carouselSlides.length}`}>
+          {carouselSlides.map((slide, index) => (
+            <span
+              key={slide.id ?? slide.image}
+              aria-hidden="true"
+              className={cn(
+                'h-1.5 rounded-full bg-[#51375C] transition-[opacity,width] duration-200 ease-out',
+                index === activeIndex ? 'w-4 opacity-100' : 'w-1.5 opacity-30',
+              )}
+            />
+          ))}
+        </div>
+      ) : null}
     </div>
   )
 }

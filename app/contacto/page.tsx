@@ -3,6 +3,8 @@ import { ContactForm } from '@/components/giuliett/contact-form'
 import { Reveal } from '@/components/giuliett/reveal'
 import { Section } from '@/components/giuliett/section'
 import { Footer } from '@/components/giuliett/sections/footer'
+import { TrustedClients } from '@/components/giuliett/trusted-clients'
+import { WhyChooseUs } from '@/components/giuliett/why-choose-us'
 
 export default function ContactoPage() {
   return (
@@ -39,6 +41,8 @@ export default function ContactoPage() {
           </Reveal>
         </div>
       </Section>
+      <WhyChooseUs />
+      <TrustedClients />
       <Footer />
     </main>
   )

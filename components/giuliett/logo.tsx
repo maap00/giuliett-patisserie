@@ -10,9 +10,9 @@ export function Logo() {
         width={3500}
         height={1700}
         sizes="112px"
-        className="h-auto w-[112px] object-contain"
+        className="h-auto w-[300px] object-contain"
       />
-      <span className="mt-0.5 text-center text-[6px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+      <span className="mt-0.5 text-center text-[14px] uppercase tracking-[0.08em] text-muted-foreground">
         Pastelería Francesa · Mendoza, Argentina
       </span>
     </span>

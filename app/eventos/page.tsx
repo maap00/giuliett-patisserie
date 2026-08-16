@@ -1,7 +1,8 @@
-import { FramedPhoto, PrimaryAction } from '@/components/giuliett/atoms'
+import { PrimaryAction } from '@/components/giuliett/atoms'
+import { HeroCarousel } from '@/components/giuliett/hero-carousel'
 import { Reveal } from '@/components/giuliett/reveal'
 import { Section } from '@/components/giuliett/section'
-import { waLink } from '@/lib/giuliett'
+import { EVENTOS, waLink } from '@/lib/giuliett'
 
 const eventProposals = [
   {
@@ -13,8 +14,6 @@ const eventProposals = [
     ],
     cta: 'Hablemos de tu boda',
     message: 'Hola Giuliett, quisiera solicitar presupuesto para una boda.',
-    image: '/images/cierre-mesa-dulce.png',
-    imageAlt: 'Mesa dulce con macarons, tartas y cookies sobre stands de cerámica lila',
     tone: 'cream',
     imageFirstOnDesktop: false,
     closing: undefined,
@@ -29,8 +28,6 @@ const eventProposals = [
     ],
     cta: 'Hablemos de tu proyecto',
     message: 'Hola Giuliett, quisiera consultar por eventos corporativos.',
-    image: '/images/producto-kits.png',
-    imageAlt: 'Caja de regalo lila con macarons y cinta de raso',
     tone: 'white',
     imageFirstOnDesktop: true,
     closing: undefined,
@@ -46,8 +43,6 @@ const eventProposals = [
     closing: 'Contanos tu idea y creemos juntos una propuesta única.',
     cta: 'Contanos tu idea',
     message: 'Hola Giuliett, quiero mi presupuesto para una celebración.',
-    image: '/images/producto-mesas.png',
-    imageAlt: 'Mesa dulce montada con macarons, flores y cerámica lila',
     tone: 'lilac-soft',
     imageFirstOnDesktop: false,
   },
@@ -73,12 +68,13 @@ function EventSection({ proposal, first }: { proposal: EventProposal; first: boo
           className={`order-1 w-full ${proposal.imageFirstOnDesktop ? 'lg:order-1' : 'lg:order-2'}`}
           delay={40}
         >
-          <FramedPhoto
-            src={proposal.image}
-            alt={proposal.imageAlt}
+          <HeroCarousel
+            slides={EVENTOS[proposal.id]}
             ratio="4/5"
-            lifted
-            className="w-full transition-transform duration-[350ms] ease-out lg:hover:-translate-y-1"
+            showProductButton={false}
+            showIndicators={true}
+            ariaLabel={`Fotografías de ${proposal.eyebrow}`}
+            className="w-full rounded-lg shadow-[var(--shadow-giuliett)] transition-transform duration-[350ms] ease-out lg:hover:-translate-y-1"
             sizes="(min-width: 1024px) 50vw, calc(100vw - 48px)"
           />
         </Reveal>

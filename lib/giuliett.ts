@@ -16,6 +16,50 @@ export function waLink(message: string) {
 
 export const WA_GENERAL = 'Hola Giuliett, quiero hacer una consulta.'
 
+export type EventImage = {
+  image: string
+  alt: string
+  /** Copy opcional superpuesto en la parte inferior de la fotografía. */
+  text?: string
+}
+
+/** Fotografías para las tres propuestas de Eventos. */
+export const EVENTOS = {
+  bodas: [
+    {
+      image: '/images/cierre-mesa-dulce.png',
+      alt: 'Mesa dulce con macarons, tartas y cookies sobre stands de cerámica lila',
+      text: 'Mesa dulce para bodas',
+    },
+    {
+      image: '/images/producto-mesas.png',
+      alt: 'Mesa dulce montada con macarons, flores y cerámica lila',
+    },
+  ],
+  empresas: [
+    {
+      image: '/images/producto-kits.png',
+      alt: 'Caja de regalo lila con macarons y cinta de raso',
+      text: 'Regalos corporativos personalizados',
+    },
+    {
+      image: '/images/producto-cookies.png',
+      alt: 'Cookies artesanales glaseadas con el logo de Giuliett sobre mármol blanco',
+    },
+  ],
+  celebraciones: [
+    {
+      image: '/images/producto-mesas.png',
+      alt: 'Mesa dulce montada con macarons, flores y cerámica lila',
+      text: 'Detalles para celebrar',
+    },
+    {
+      image: '/images/producto-macarons.png',
+      alt: 'Macarons artesanales en tonos lavanda y crema apilados sobre lino',
+    },
+  ],
+} as const satisfies Record<'bodas' | 'empresas' | 'celebraciones', readonly EventImage[]>
+
 export type Product = {
   id: string
   label: string
@@ -97,10 +141,10 @@ export const AUDIENCES: Audience[] = [
 ]
 
 export const REASONS = [
-  { id: 'francia', text: 'Formación en Francia' },
-  { id: 'entregas', text: 'Entregas a domicilio' },
-  { id: 'presentacion', text: 'Presentación premium' },
-  { id: 'fundadora', text: 'Hablás con la fundadora' },
+  { id: 'francia', text: 'Formación en Francia', Image: '/images/alfajores.png' },
+  { id: 'entregas', text: 'Entregas a domicilio', Image: '/images/alfajores.png' },
+  { id: 'presentacion', text: 'Presentación premium', Image: '/images/alfajores.png' },
+  { id: 'fundadora', text: 'Hablás con la fundadora', Image: '/images/founter.png' },
 ] as const
 
 export const STEPS = [

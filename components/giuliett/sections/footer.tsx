@@ -49,7 +49,7 @@ export function Footer() {
           </Reveal>
         </div>
 
-        <Reveal delay={160} className="relative flex w-full max-w-[260px] justify-center self-end md:max-w-[340px] md:justify-end">
+        <Reveal delay={160} className="relative flex w-full max-w-[260px] justify-center md:max-w-[340px] md:justify-end">
           <Image
             src="/images/giu-footer.png"
             alt="Ilustración de Giu, chef pastelera de Giuliett"

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Camera, House, MessageCircle, Sparkles, type LucideIcon, UserRound } from 'lucide-react'
+import { CakeSlice, House, MessageCircle, Sparkles, type LucideIcon, UserRound } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
@@ -13,8 +13,8 @@ type NavigationItem = {
 
 const mobileNavigationItems: NavigationItem[] = [
   { href: '/', label: 'Inicio', icon: House },
-  { href: '/giu', label: 'Giu', icon: UserRound },
-  { href: '/galeria', label: 'Galería', icon: Camera },
+  { href: '/giu', label: 'Giuliett', icon: UserRound },
+  { href: '/galeria', label: 'Productos', icon: CakeSlice },
   { href: '/eventos', label: 'Eventos', icon: Sparkles },
   { href: '/contacto', label: 'Pedido', icon: MessageCircle },
 ]
@@ -37,10 +37,10 @@ export function GlobalNavigation() {
   return (
     <>
       <header className="sticky top-0 z-50 hidden border-b border-border/60 bg-background/85 backdrop-blur-md md:block">
-        <nav aria-label="Navegación principal" className="mx-auto flex h-[76px] max-w-[1200px] items-center justify-between px-8">
-          <Link href="/" className="font-script text-[30px] leading-none text-primary" aria-label="Giuliett, inicio">
+        <nav aria-label="Navegación principal" className="mx-auto flex h-[76px] max-w-[1200px] items-center justify-center px-8">
+          {/* <Link href="/" className="font-script text-[30px] leading-none text-primary" aria-label="Giuliett, inicio">
             Giuliett
-          </Link>
+          </Link> */}
           <ul className="flex items-center gap-7 lg:gap-9">
             {desktopNavigationItems.map(({ href, label }) => {
               const active = isCurrentPath(pathname, href)
