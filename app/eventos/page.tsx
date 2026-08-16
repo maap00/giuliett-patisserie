@@ -11,7 +11,7 @@ const eventProposals = [
     paragraphs: [
       'Creamos experiencias dulces totalmente personalizadas para uno de los días más importantes de sus vidas. Los acompañamos desde el asesoramiento inicial hasta la producción artesanal, el traslado y el montaje, cuidando cada detalle para que todo salga perfecto.',
     ],
-    cta: 'Solicitar presupuesto',
+    cta: 'Hablemos de tu boda',
     message: 'Hola Giuliett, quisiera solicitar presupuesto para una boda.',
     image: '/images/cierre-mesa-dulce.png',
     imageAlt: 'Mesa dulce con macarons, tartas y cookies sobre stands de cerámica lila',
@@ -27,7 +27,7 @@ const eventProposals = [
       'Desarrollamos propuestas gastronómicas personalizadas para empresas, eventos corporativos, lanzamientos, acciones de marketing y regalos institucionales.',
       'Incorporamos la identidad de tu marca en cada detalle para crear una experiencia memorable.',
     ],
-    cta: 'Consultar por eventos corporativos',
+    cta: 'Hablemos de tu proyecto',
     message: 'Hola Giuliett, quisiera consultar por eventos corporativos.',
     image: '/images/producto-kits.png',
     imageAlt: 'Caja de regalo lila con macarons y cinta de raso',
@@ -40,11 +40,11 @@ const eventProposals = [
     eyebrow: '03 · Celebraciones',
     title: 'Cada momento especial merece un detalle único.',
     paragraphs: [
-      'Cumpleaños, bautismos, baby showers, aniversarios y todo tipo de eventos.',
-      'Diseñamos propuestas personalizadas para que cada ocasión tenga una impronta dulce, original y pensada especialmente para vos.',
+      'Cumpleaños, bautismos, comuniones, baby showers, aniversarios y mucho más.',
+      'Diseñamos propuestas a medida con mesas dulces, tortas, macarons y detalles pensados especialmente para vos.',
     ],
     closing: 'Contanos tu idea y creemos juntos una propuesta única.',
-    cta: 'Quiero mi presupuesto',
+    cta: 'Contanos tu idea',
     message: 'Hola Giuliett, quiero mi presupuesto para una celebración.',
     image: '/images/producto-mesas.png',
     imageAlt: 'Mesa dulce montada con macarons, flores y cerámica lila',
@@ -85,7 +85,7 @@ function EventSection({ proposal, first }: { proposal: EventProposal; first: boo
 
         <div className={`order-2 flex flex-col items-start ${proposal.imageFirstOnDesktop ? 'lg:order-2' : 'lg:order-1'}`}>
           <Reveal delay={100}>
-            <p className="tracked text-[11px] font-medium text-muted-foreground">{proposal.eyebrow}</p>
+            <p className="tracked text-[30px] font-medium text-muted-foreground" >{proposal.eyebrow}</p>
           </Reveal>
           <Reveal delay={160}>
             <h1 id={proposal.id} className="mt-5 max-w-[18ch] text-balance text-[30px] font-light leading-[1.18] text-primary md:text-[40px] lg:text-[46px]">

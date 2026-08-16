@@ -18,22 +18,22 @@ const teamMembers = [
   {
     name: 'Juli',
     role: 'Responsable de cocina',
-    description: 'Lidera la producción diaria, cuidando cada detalle y manteniendo la calidad que caracteriza a Giuliett.',
+    description: 'Lidera la producción artesanal de Giuliett. Supervisa cada elaboración y trabaja con dedicación para garantizar la calidad y el cuidado en cada detalle.',
   },
   {
     name: 'Jime',
     role: 'Diseño gráfico & Producción',
-    description: 'Da vida a la identidad visual de la marca y acompaña al equipo de cocina en cada creación.',
+    description: 'Es la responsable de la identidad visual de Giuliett. Diseña cada pieza gráfica de la marca y acompaña al equipo de cocina, aportando creatividad y atención a los detalles en cada proyecto.',
   },
   {
     name: 'Ana',
     role: 'Marketing & Community Manager',
-    description: 'Es quien comunica la esencia de Giuliett y crea el contenido que compartimos todos los días.',
+    description: 'Planifica la comunicación de Giuliett y gestiona nuestras redes sociales. Es quien transforma cada creación en contenido, acercando la esencia de la marca a nuestra comunidad.',
   },
   {
     name: 'Ceci',
-    role: 'Ingeniera Comercial & Asesora',
-    description: 'Acompaña el crecimiento de la marca, aportando una mirada estratégica y asesorando a nuestros clientes.',
+    role: 'Ingeniera Comercial & Desarrollo Estratégico',
+    description: 'Aporta una mirada estratégica al crecimiento de Giuliett, liderando la planificación, el desarrollo de la marca y los objetivos que acompañan su evolución.',
   },
 ] as const
 
