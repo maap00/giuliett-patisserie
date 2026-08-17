@@ -23,8 +23,8 @@
   --color-border: var(--border);
 
   /* --- Tipografía ---------------------------------------- */
-  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
-  --font-script: var(--font-ephesis), 'Brush Script MT', cursive;
+  --font-sans: var(--font-poppins), 'Sweet Sans Pro', sans-serif;
+  --font-script: var(--font-ephesis), 'CornerStoreJF Regular', cursive;
 
   /* --- Radios -------------------------------------------- */
   --radius-sm: 12px;
