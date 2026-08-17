@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { useRef, useState, type PointerEvent } from 'react'
 import { PRODUCTS } from '@/lib/giuliett'
 import { cn } from '@/lib/utils'
+import type { ProductCategory } from '@/types/product'
+import { productCategories } from '@/lib/giuliett'
 
 type DragState = {
   pointerId: number
@@ -120,10 +122,10 @@ export function HeroCarousel({
         aria-roledescription="carrusel"
         aria-label={ariaLabel}
         onScroll={handleScroll}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
+        // onPointerDown={handlePointerDown}
+        // onPointerMove={handlePointerMove}
+        // onPointerUp={endDrag}
+        // onPointerCancel={endDrag}
         className={cn(
           'flex snap-x snap-mandatory overflow-x-auto overflow-y-hidden rounded-[32px] bg-[#BFB4DC]/20',
           'touch-pan-x select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
@@ -132,39 +134,47 @@ export function HeroCarousel({
           className,
         )}
       >
-        {carouselSlides.map((slide, index) => (
+        {productCategories.map((slide, index) => (
           <figure
-            key={slide.id ?? slide.image}
+            key={slide.name}
             role="group"
             aria-roledescription="diapositiva"
-            aria-label={`${index + 1} de ${carouselSlides.length}${slide.label ? `: ${slide.label}${slide.script ? ` ${slide.script}` : ''}` : ''}`}
+            // aria-label={`${index + 1} de ${carouselSlides.length}${slide.label ? `: ${slide.label}${slide.script ? ` ${slide.script}` : ''}` : ''}`}
             className="relative min-w-full snap-center"
           >
             <div className="relative" style={{ aspectRatio: ratio.replace('/', ' / ') }}>
               <Image
-                src={slide.image}
+                src={slide.src}
                 alt={slide.alt}
                 fill
                 priority={index === 0}
                 sizes={sizes}
                 draggable={false}
                 className="object-cover"
+                // onClick={() => window.location.assign(`/productos?categoria=${slide.category}`)}
               />
             </div>
-            {slide.text ? (
-              <figcaption className="absolute bottom-3 left-3 right-3 truncate rounded-sm bg-white/82 px-3 py-2 text-center text-[12px] font-medium text-primary backdrop-blur-sm">
-                {slide.text}
+            <div>
+
+            {slide.name ? (
+              <figcaption className="absolute bottom-3 left-3 right-3 truncate rounded-sm bg-white/82 px-3 py-2 text-center text-[12px] font-medium text-primary backdrop-blur-sm" style={{backgroundColor:'color-mix(in oklab, #beb4dc 82%, #d04d4d00)'}}>
+                {slide.name}
               </figcaption>
             ) : null}
+            </div>
+            <div>
+
             {showProductButton ? (
               <button
-                type="button"
-                aria-label={`Ver producto: ${slide.label}`}
-                className="absolute bottom-4 left-1/2 min-h-[40px] -translate-x-1/2 rounded-full bg-[#FFF8E9]/82 px-5 text-[12px] font-medium text-[#51375C] shadow-[0_8px_20px_-10px_rgb(63_42_80/0.35)] backdrop-blur-md transition-colors duration-200 hover:bg-[#FFF8E9]"
+              type="button"
+              onClick={() => window.location.assign(`/productos?categoria=${slide.category}`)}
+              aria-label={`Ver producto: ${slide.name}`}
+              className="absolute bottom-15 left-1/2 min-h-[40px] -translate-x-1/2 rounded-full bg-[#FFF8E9]/82 px-5 text-[12px] font-medium text-[#51375C] shadow-[0_8px_20px_-10px_rgb(63_42_80/0.35)] backdrop-blur-md transition-colors duration-200 hover:bg-[#FFF8E9]"
               >
                 Ver producto
               </button>
             ) : null}
+            </div>
           </figure>
         ))}
       </div>

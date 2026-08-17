@@ -5,6 +5,10 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { PRODUCT_CATEGORY_OPTIONS, PRODUCTS } from '@/lib/products'
 import type { ProductCategory } from '@/types/product'
+import { IconArrow } from './line-art'
+import { SectionLockup } from './section-lockup'
+import { ChefHat } from 'lucide-react';
+
 
 type ProductCatalogProps = {
   initialCategory: ProductCategory
@@ -19,9 +23,11 @@ const priceFormatter = new Intl.NumberFormat('es-AR', {
 export function ProductCatalog({ initialCategory }: ProductCatalogProps) {
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory>(initialCategory)
   const products = PRODUCTS.filter((product) => product.category === selectedCategory)
+  const selectedCategoryLabel = PRODUCT_CATEGORY_OPTIONS.find((category) => category.value === selectedCategory)?.label
 
   return (
     <div>
+      <SectionLockup caps={selectedCategoryLabel ?? ''} size="lg" />
       <div className="flex justify-center md:justify-end">
         <label className="sr-only" htmlFor="product-category">
           Categoría de productos
@@ -60,6 +66,9 @@ export function ProductCatalog({ initialCategory }: ProductCatalogProps) {
                   sizes="(min-width: 1024px) 260px, (min-width: 768px) 30vw, 46vw"
                   className="hidden object-cover opacity-0 transition-opacity duration-[250ms] ease-out md:block md:group-hover:opacity-100"
                 />
+                <span aria-hidden="true" className="pointer-events-none absolute bottom-3 left-1/2 flex h-7 w-7 -translate-x-1/2 items-center justify-center rounded-full bg-background/78 text-primary/75 backdrop-blur-sm">
+                  <ChefHat className="h-3.5 w-3.5" />
+                </span>
               </div>
               <div className="mt-4 flex flex-col gap-1.5">
                 <h2 className="text-[14px] font-medium leading-snug text-primary md:text-[15px]">{product.name}</h2>

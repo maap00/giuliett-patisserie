@@ -154,3 +154,46 @@ export const STEPS = [
 ] as const
 
 export const CLIENTS = ['LTN', 'Marisolfa', 'UltraTex', 'Andreu'] as const
+
+export const productCategories = [
+  {
+    id: 1,
+    name: 'Tortas clásicas',
+    src: '/images/producto-cookies.png',
+    alt: 'Cookies artesanales glaseadas con el logo de Giuliett sobre mármol blanco',
+    imageFirstOnDesktop: false,
+    category: 'tortas-clasicas',
+    bgColor: '#e2b0ac',
+    textColor: '#3f2a50',
+  },
+  {
+    id: 2,
+    name: 'Tortas personalizadas',
+    src: '/images/producto-mesas.png',
+    alt: 'Mesa dulce montada con macarons, flores y cerámica lila',
+    imageFirstOnDesktop: true,
+    category: 'tortas-personalizadas',
+    bgColor: '#51375c',
+    textColor: '#f5f1eb',
+  },
+  {
+    id: 3,
+    name: 'Galletas personalizadas',
+    src: '/images/manifiesto-manos.png',
+    alt: 'Manos decorando una cookie glaseada a mano',
+    imageFirstOnDesktop: false,
+    category: 'galletas-personalizadas',
+    bgColor: '#beb4dc',
+    textColor: '#3f2a50',
+  },
+  {
+    id: 4,
+    name: 'Boxes',
+    src: '/images/producto-kits.png',
+    alt: 'Caja de regalo lila con macarons y cinta de raso',
+    imageFirstOnDesktop: true,
+    category: 'boxes',
+    bgColor: '#f5f1eb',
+    textColor: '#3f2a50',
+  },
+] as const

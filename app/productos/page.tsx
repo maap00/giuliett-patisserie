@@ -1,6 +1,5 @@
 import { ProductCatalog } from '@/components/giuliett/product-catalog'
 import { Section } from '@/components/giuliett/section'
-import { SectionLockup } from '@/components/giuliett/section-lockup'
 import { isProductCategory } from '@/lib/products'
 import { PRODUCT_CATEGORIES } from '@/types/product'
 
@@ -19,7 +18,6 @@ export default async function ProductosPage({ searchParams }: ProductosPageProps
         <h1 id="productos-titulo" className="sr-only">
           Nuestros productos
         </h1>
-        <SectionLockup caps="Nuestros productos" script="Favoritos" size="lg" />
         <ProductCatalog initialCategory={initialCategory} />
       </Section>
     </main>
