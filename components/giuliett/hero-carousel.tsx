@@ -1,11 +1,13 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRef, useState, type PointerEvent } from 'react'
 import { PRODUCTS } from '@/lib/giuliett'
 import { cn } from '@/lib/utils'
-import type { ProductCategory } from '@/types/product'
 import { productCategories } from '@/lib/giuliett'
+import { CakeSlice, Truck } from 'lucide-react'
+import { IconArrow } from './line-art'
 
 type DragState = {
   pointerId: number
@@ -32,6 +34,8 @@ type HeroCarouselProps = {
   showProductButton?: boolean
   showIndicators?: boolean
   ariaLabel?: string
+  /** Presentación inmersiva reservada para la portada. */
+  variant?: 'default' | 'home'
 }
 
 const productSlides: readonly CarouselSlide[] = PRODUCTS.map((product) => ({
@@ -55,6 +59,7 @@ export function HeroCarousel({
   showProductButton = true,
   showIndicators = true,
   ariaLabel = 'Productos Giuliett',
+  variant = 'default',
 }: HeroCarouselProps) {
   const carouselSlides = slides ?? productSlides
   const viewportRef = useRef<HTMLDivElement>(null)
@@ -112,6 +117,98 @@ export function HeroCarousel({
     dragRef.current = null
     setDragging(false)
     updateActiveSlide()
+  }
+
+  if (variant === 'home') {
+    return (
+      <div className="relative w-full overflow-hidden">
+        <div
+          ref={viewportRef}
+          role="region"
+          aria-roledescription="carrusel"
+          aria-label={ariaLabel}
+          onScroll={handleScroll}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+          className={cn(
+            'flex snap-x snap-mandatory overflow-x-auto overflow-y-hidden bg-[#BFB4DC]/20',
+            'touch-pan-x select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+            dragging ? 'cursor-grabbing' : 'cursor-grab',
+            className,
+          )}
+        >
+          {productCategories.map((slide, index) => (
+            <figure
+              key={slide.name}
+              role="group"
+              aria-roledescription="diapositiva"
+              aria-label={`${index + 1} de ${productCategories.length}: ${slide.name}`}
+              className="relative isolate flex min-h-[680px] min-w-full snap-center items-center justify-center overflow-hidden sm:min-h-[720px] lg:min-h-[calc(100svh-76px)]"
+            >
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                priority={index === 0}
+                sizes="100vw"
+                draggable={false}
+                className="-z-20 object-cover"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(255,248,233,0.92)_0%,rgba(255,248,233,0.72)_35%,rgba(255,248,233,0.18)_61%,transparent_76%)]"
+              />
+
+              <div className="relative z-10 flex w-full max-w-[680px] flex-col items-center px-6 pb-[108px] pt-10 text-center text-primary sm:px-10 sm:pb-12 lg:px-12">
+                <Image
+                  src="/images/giuliett-logo.png"
+                  alt="Giuliett Pâtisserie"
+                  width={3500}
+                  height={1700}
+                  sizes="(min-width: 1024px) 370px, 250px"
+                  className="h-auto w-[230px] object-contain sm:w-[280px] lg:w-[370px]"
+                />
+                <p className="tracked mt-4 text-[10px] font-medium leading-relaxed sm:text-[11px] lg:mt-5 lg:text-[12px]">
+                  Pastelería Francesa · Mendoza, Argentina
+                </p>
+                <span aria-hidden="true" className="mt-5 h-px w-8 bg-primary/55 lg:mt-6" />
+
+             
+
+                <Link
+                  href={`/productos?categoria=${slide.category}`}
+                  className="mt-8 inline-flex min-h-[50px] items-center gap-3 rounded-full bg-primary px-6 text-[14px] font-medium text-primary-foreground shadow-[0_12px_28px_-14px_rgb(63_42_80/0.5)] transition-[background-color,box-shadow,transform] duration-200 ease-out hover:bg-lilac-ink hover:shadow-[var(--shadow-giuliett)] active:scale-[0.985] lg:mt-9"
+                >
+                  Ver producto
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full border border-current">
+                    <IconArrow className="h-3 w-3" strokeWidth={1.8} />
+                  </span>
+                </Link>
+
+                <h1 className="mt-5 text-balance text-[25px] font-medium leading-tight text-primary sm:text-[29px] lg:mt-6 lg:text-[34px]">
+                  {slide.name}
+                </h1>
+
+                <div className="mt-6 flex justify-center gap-2" aria-label={`Producto ${activeIndex + 1} de ${productCategories.length}`}>
+                  {productCategories.map((category, indicatorIndex) => (
+                    <span
+                      key={category.name}
+                      aria-hidden="true"
+                      className={cn(
+                        'h-2 w-2 rounded-full bg-primary transition-[opacity,transform] duration-200 ease-out',
+                        indicatorIndex === activeIndex ? 'scale-100 opacity-100' : 'scale-75 opacity-30',
+                      )}
+                    />
+                  ))}
+                </div>
+              </div>
+            </figure>
+          ))}
+        </div>
+      </div>
+    )
   }
 
   return (

@@ -15,7 +15,7 @@ const productCategories = [
     alt: 'Cookies artesanales glaseadas con el logo de Giuliett sobre mármol blanco',
     imageFirstOnDesktop: false,
     category: PRODUCT_CATEGORIES.CLASSIC_CAKES,
-    bgColor: '#e2b0ac',
+    bgColor: '#f5f1eb',
     textColor: '#3f2a50',
   },
   {

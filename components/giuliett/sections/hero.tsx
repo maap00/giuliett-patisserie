@@ -1,11 +1,7 @@
-import { CONTACT, WA_GENERAL, waLink } from '@/lib/giuliett'
-import { PrimaryAction } from '../atoms'
+import { WA_GENERAL, waLink } from '@/lib/giuliett'
 import { IconWhatsApp } from '../line-art'
-import { Reveal } from '../reveal'
 import { HeroCarousel } from '../hero-carousel'
-import { ScallopAwning } from '../scallop-awning'
-import { SectionLockup } from '../section-lockup'
-import { Logo } from '../logo'
+import { HomeFooter } from './home-footer'
 
 /**
  * 01 · HERO
@@ -14,60 +10,9 @@ import { Logo } from '../logo'
  */
 export function Hero() {
   return (
-    <section id="inicio" className="relative flex min-h-svh flex-col bg-[#FFF8E9] text-[#51375C]">
-      {/* <ScallopAwning className="text-[#BFB4DC]" /> */}
-      {/* <CheckerboardBand /> */}
-
-      <div className="mx-auto flex w-full max-w-[1120px] flex-1 flex-col px-5 pb-10 pt-10 sm:px-8 sm:pb-16 sm:pt-12 lg:px-10 lg:pb-20 lg:pt-14">
-        <Reveal className="flex justify-center lg:justify-center">
-          <Logotype />
-        </Reveal>
-
-        <div className="mt-10 flex flex-1 flex-col gap-10 sm:mt-12 lg:mt-14 lg:flex-row lg:items-center lg:gap-16 xl:gap-20">
-          <Reveal className="w-full lg:w-[54%]" delay={60}>
-            <div className="mx-auto w-full max-w-[480px] lg:max-w-none">
-              <HeroCarousel />
-            </div>
-          </Reveal>
-
-          <div className="flex w-full flex-col items-center lg:w-[46%] lg:items-start">
-            <Reveal delay={180} className="w-full">
-              <p className="text-center text-[13px] uppercase tracking-[0.18em] text-[#51375C]/75 lg:text-left">
-                Empresas · Cafeterías · Eventos
-              </p>
-            </Reveal>
-
-            <Reveal delay={120} className="mt-8 w-full">
-              <SectionLockup
-                as="h1"
-                caps="Pastelería"
-                script="Francesa"
-                size="lg"
-                align="center"
-                className="lg:items-start lg:text-left [&_span:first-child]:text-[#51375C] [&_span:last-child]:text-[#51375C]"
-                capsClassName="font-light"
-                scriptClassName="text-[#51375C]"
-              />
-            </Reveal>
-
-           
-
-            <Reveal delay={240} className="mt-10 flex w-full flex-col items-center lg:items-start">
-              <PrimaryAction
-                href={waLink(WA_GENERAL)}
-                className="w-full max-w-[400px] bg-[#51375C] text-[#FFF8E9] hover:bg-[#4F100B] hover:shadow-[0_16px_40px_-14px_rgb(79_16_11/0.35)] lg:w-auto lg:min-w-[280px] lg:max-w-none"
-                ariaLabel="Escribinos por WhatsApp"
-              >
-                Escribinos por WhatsApp
-              </PrimaryAction>
-
-              <p className="mt-5 text-center text-[12px] tracking-[0.06em] text-[#9C8065] lg:text-left">
-                {CONTACT.city} 
-              </p>
-            </Reveal>
-          </div>
-        </div>
-      </div>
+    <section id="inicio" className="relative overflow-hidden bg-[#FFF8E9] text-[#51375C]">
+      <HeroCarousel variant="home" ariaLabel="Productos destacados Giuliett" />
+      <HomeFooter />
 
       <a
         href={waLink(WA_GENERAL)}
@@ -79,36 +24,5 @@ export function Hero() {
         <IconWhatsApp className="h-6 w-6" strokeWidth={1.7} />
       </a>
     </section>
-  )
-}
-
-function Logotype() {
-  return (
-    <div className="flex flex-col justify-center items-center lg:justify-center">
-      {/* <span className="font-script text-[48px] leading-none text-[#51375C] sm:text-[56px] lg:text-[64px]">
-        Giuliett
-      </span>
-      <span className="tracked mt-2.5 text-[10px] font-medium text-[#9C8065] sm:text-[11px]">Pâtisserie</span> */}
-      <Logo/>
-    </div>
-  )
-}
-
-/** Franja ajedrezada del brochure — sólo decoración de hero. */
-function CheckerboardBand() {
-  return (
-    <div aria-hidden="true" className="h-3 w-full sm:h-3.5">
-      <svg viewBox="0 0 120 12" preserveAspectRatio="none" className="block h-full w-full">
-        <defs>
-          <pattern id="hero-checker" width="12" height="12" patternUnits="userSpaceOnUse">
-            <rect width="6" height="6" fill="#BFB4DC" />
-            <rect x="6" y="6" width="6" height="6" fill="#BFB4DC" />
-            <rect x="6" width="6" height="6" fill="#E1B0AC" opacity="0.55" />
-            <rect y="6" width="6" height="6" fill="#E1B0AC" opacity="0.55" />
-          </pattern>
-        </defs>
-        <rect width="120" height="12" fill="url(#hero-checker)" />
-      </svg>
-    </div>
   )
 }
