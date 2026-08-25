@@ -1,13 +1,14 @@
 import Image from 'next/image'
 import { CONTACT } from '@/lib/giuliett'
-import { IconInstagram, IconMail, IconPhone } from '../line-art'
+import { IconInstagram, IconMail, IconPhone, IconWhatsApp } from '../line-art'
 import { Reveal } from '../reveal'
 import { SectionLockup } from '../section-lockup'
+import { Logo } from '../logo'
 
 const FOOTER_EMAIL = 'hola@giuliettpatisserie.com'
 
 const contactLinks = [
-  { label: CONTACT.phoneDisplay, href: `tel:+${CONTACT.phoneRaw}`, Icon: IconPhone, external: false },
+  { label: CONTACT.phoneDisplay, href: `tel:+${CONTACT.phoneRaw}`, Icon: IconWhatsApp, external: false },
   { label: FOOTER_EMAIL, href: `mailto:${FOOTER_EMAIL}`, Icon: IconMail, external: false },
   { label: CONTACT.instagramHandle, href: CONTACT.instagramUrl, Icon: IconInstagram, external: true },
 ] as const
@@ -19,14 +20,8 @@ export function Footer() {
       <div className="mx-auto flex min-h-[360px] w-full max-w-[1200px] flex-col items-center gap-10 px-6 md:min-h-[340px] md:flex-row md:items-end md:justify-between md:gap-12 md:px-8">
         <div className="flex w-full flex-col items-center pt-2 text-center md:max-w-[620px] md:items-start md:py-16 md:text-left">
           <Reveal>
-            <SectionLockup
-              caps="Comunicate con"
-              script="Giuliett"
-              as="h2"
-              className="md:items-start md:text-left"
-              capsClassName="text-[18px] md:text-[24px]"
-              scriptClassName="text-[44px] md:text-[62px]"
-            />
+            
+            <Logo></Logo>
           </Reveal>
 
           <Reveal delay={100}>

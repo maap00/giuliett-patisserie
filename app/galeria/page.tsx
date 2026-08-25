@@ -7,6 +7,7 @@ import { HeroCarousel } from '@/components/giuliett/hero-carousel'
 import { Reveal } from '@/components/giuliett/reveal'
 import { SectionLockup } from '@/components/giuliett/section-lockup'
 import { waLink, WA_GENERAL, CONTACT } from '@/lib/giuliett'
+import { IconWhatsApp } from '@/components/giuliett/line-art'
 
 const productCategories = [
   {
@@ -131,6 +132,16 @@ export default function GaleriaPage() {
             </li>
           ))}
         </ul>
+
+         <a
+                href={waLink(WA_GENERAL)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Escribinos por WhatsApp"
+                className="fixed bottom-[calc(92px+env(safe-area-inset-bottom))] right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#51375C] text-[#FFF8E9] shadow-[0_12px_32px_-10px_rgb(81_55_92/0.45)] transition-[transform,box-shadow] duration-300 ease-out hover:scale-[1.03] active:scale-[0.97] sm:right-8 lg:right-8"
+              >
+                <IconWhatsApp className="h-6 w-6" strokeWidth={1.7} />
+              </a>
       </Section>
     </main>
   )

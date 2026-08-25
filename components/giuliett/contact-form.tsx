@@ -5,6 +5,7 @@ import { waLink } from '@/lib/giuliett'
 
 type FormValues = {
   name: string
+  email: string
   whatsapp: string
   orderType: string
   eventDate: string
@@ -13,10 +14,11 @@ type FormValues = {
   description: string
 }
 
-type FormErrors = Partial<Record<'name' | 'whatsapp' | 'orderType', string>>
+type FormErrors = Partial<Record<'name' | 'email' | 'whatsapp' | 'orderType', string>>
 
 const initialValues: FormValues = {
   name: '',
+  email: '',
   whatsapp: '',
   orderType: '',
   eventDate: '',
@@ -25,8 +27,8 @@ const initialValues: FormValues = {
   description: '',
 }
 
-const orderTypes = ['Torta', 'Galletas', 'Box', 'Evento', 'Mesa dulce', 'Otro']
-const interests = ['Tortas clásicas', 'Tortas personalizadas', 'Galletas personalizadas', 'Boxes']
+const orderTypes = ['Tortas', 'Galletas personalizadas', 'Box', 'Evento', 'Mesa dulce', 'Otro']
+const interests = ['Tortas clásicas', 'Tortas personalizadas', 'Galletas personalizadas', 'Boxes', 'Mesa dulce','Celebraciones','Bodas','Cumpleaños',  'Otro']
 
 export function ContactForm() {
   const [values, setValues] = useState<FormValues>(initialValues)
@@ -76,7 +78,7 @@ export function ContactForm() {
 
   return (
     <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-7">
-      <Field label="Nombre" required error={errors.name}>
+      <Field label="Nombre y apellido" required error={errors.name}>
         <input
           value={values.name}
           onChange={(event) => updateValue('name', event.target.value)}
@@ -86,7 +88,17 @@ export function ContactForm() {
         />
       </Field>
 
-      <Field label="WhatsApp" required error={errors.whatsapp}>
+      <Field label="Email" required error={errors.email}>
+        <input
+          value={values.email}
+          onChange={(event) => updateValue('email', event.target.value)}
+          aria-invalid={Boolean(errors.email)}
+          className={inputClassName}
+          autoComplete="email"
+        />
+      </Field>
+
+      <Field label="Número de teléfono" required error={errors.whatsapp}>
         <input
           type="tel"
           value={values.whatsapp}
@@ -123,7 +135,7 @@ export function ContactForm() {
             className={inputClassName}
           />
         </Field>
-        <Field label="Cantidad aproximada de personas">
+        <Field label="Cantidad de invitados">
           <input
             type="number"
             min="1"
@@ -136,7 +148,7 @@ export function ContactForm() {
       </div>
 
       <fieldset>
-        <legend className="text-[14px] font-medium text-primary">¿Qué te interesa?</legend>
+        <legend className="text-[14px] font-medium text-primary">¿Qué estás buscando?</legend>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {interests.map((interest) => {
             const selected = values.interests.includes(interest)
