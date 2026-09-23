@@ -195,8 +195,9 @@ lib/
 │   ├── admin.ts                  # clave SECRETA, solo servidor (server-only)
 │   └── server.ts                 # cliente con sesión (cookies) para el panel
 ├── admin/auth.ts                 # requerirAdministrador()
-├── giuliett.ts                   # CONTACT, waLink(), EVENTOS
-└── products.ts                   # catálogo PRODUCTS (precios incluidos)
+├── catalogo.ts                   # ÚNICA puerta a productos/eventos desde app/ y components/
+├── giuliett.ts                   # CONTACT, waLink(), EVENTOS (datos crudos)
+└── products.ts                   # catálogo PRODUCTS (datos crudos, precios incluidos)
 proxy.ts                          # protege /admin, refresca la sesión
 supabase/migrations/              # esquema versionado (consultas, administradores, RLS)
 scripts/crear-admin.mjs           # da acceso al panel a un email
@@ -208,14 +209,20 @@ test/                             # Vitest
 | Dato | Dónde |
 |---|---|
 | Teléfono, email, Instagram, ciudad | `lib/giuliett.ts` → `CONTACT` |
-| Productos, precios, galerías | `lib/products.ts` → `PRODUCTS` |
-| Fotos de Eventos | `lib/giuliett.ts` → `EVENTOS` |
+| Productos, precios, galerías | `lib/products.ts` → `PRODUCTS` (se leen vía `lib/catalogo.ts`) |
+| Fotos de Eventos | `lib/giuliett.ts` → `EVENTOS` (se leen vía `lib/catalogo.ts`) |
 | **Consultas de clientes** | **Supabase**, tabla `consultas` (se ven en `/admin`) |
 | Quién entra al panel | Supabase, tabla `administradores` |
 
 Las **4 categorías** de producto: `tortas-clasicas`, `tortas-personalizadas`,
 `galletas-personalizadas`, `boxes`. **Para agregar un producto:** sumar un objeto a
 `PRODUCTS` con `slug` único, `category` válida y rutas de imagen que existan.
+
+**Capa de acceso (`lib/catalogo.ts`).** Las páginas y componentes **no importan** `PRODUCTS`,
+`getProductBySlug` ni `EVENTOS` directo: usan `getProductos()`, `getProductoPorSlug()`,
+`getProductosPorCategoria()`, `getCategorias()` y `getEventos()`. Hoy leen los arrays estáticos;
+cuando llegue el CMS (Fase D) cambian solo esas funciones. Un test (`test/catalogo.acceso.test.ts`)
+falla si alguien se salta la capa. Son `async` a propósito: el contrato ya es el de una fuente remota.
 
 ---
 
@@ -315,9 +322,11 @@ Detectada el 22-09-2026. Lo resuelto se resolvió con el menor impacto posible (
 8. ~~Email decía obligatorio pero no se validaba~~ → resuelto: opcional y validado.
 9. ~~El formulario no registraba nada~~ → resuelto en Fase B.
 10. **Vercel en plan Hobby** (según sus términos, uso no comercial): pasar a **Pro** al lanzar
-    con dominio. Región de Functions: Adrián la cambió a `gru1` (São Paulo) el 23-09-2026, pero el
-    primer deploy posterior seguía reportando `iad1` → **verificar en el próximo deploy** (Vercel →
-    Deployments → el deploy → "Regions"); si sigue en `iad1`, rehacer Settings → Functions → Save.
+    con dominio. **Región de Functions: `gru1` (São Paulo), verificada el 23-09-2026** en el header
+    `X-Vercel-Id: gru1::gru1::…` de una ruta dinámica. Lo que pasó antes: el plan Hobby permite **una
+    sola región** y habían quedado tildadas `iad1` y `gru1` a la vez, con lo que el botón Save no se
+    habilitaba; hubo que destildar `iad1`, guardar y redeployar. Si algún día vuelve a `iad1`,
+    ese es el primer lugar donde mirar.
 11. **Rotación de la clave secreta (22/23-09-2026):** `giuliett_servidor` es la clave en uso
     (`.env.local` y Vercel, probada). `servidor_web` fue borrada. La secreta `default` de Supabase
     **no se puede borrar desde el menú de la fila** (Supabase la protege): queda sin usar. Si algún
@@ -374,19 +383,33 @@ PR #1: https://github.com/maap00/giuliett-patisserie/pull/1 (pendiente de review
 - [x] Contraste del nav móvil corregido (etiquetas de 10 px: taupe `#9C8065` → `#7D6650`, 5,1:1)
       y `role="group"` en los indicadores de los tres carruseles (`aria-label` en un `div` sin
       rol está prohibido). **Accesibilidad Lighthouse: 100** en la home (era 91).
+- [x] **Auditoría de rutas sobre el staging (23-09-2026, puntos 2 y 3 del checklist):** todas las
+      rutas fijas en 200, `/admin` → `/admin/login` (307), `/no-existe` y `/productos/no-existe` en
+      404, `/api/consultas` por GET en 405, las **24 URLs del sitemap en 200**, `?categoria=inventada`
+      cae en Tortas clásicas. Flujo **Categoría → Producto → Volver**: el botón "Volver" siempre
+      funcionó; **"Atrás" del navegador mostraba la categoría anterior** (URL decía galletas, grilla
+      mostraba Boxes) → corregido: `ProductCatalog` deriva la categoría de `useSearchParams()` en vez
+      de un `useState` (`test/product-catalog.test.tsx`, render SSR con `next/navigation` mockeado).
+      Verificado en escritorio (1280) y móvil (390) con Playwright, en las dos direcciones.
 - [ ] `NEXT_PUBLIC_SITE_URL` en Vercel cuando exista el dominio (hoy usa la URL de producción de
       Vercel sola).
 - [ ] GA4 / Search Console (necesita el dominio y una cuenta de Google de Giuliett).
 - [ ] Medir Lighthouse en producción y revisar el LCP móvil (3,4 s simulado: hero image).
 
 Notas: el 404 de `/_vercel/insights/script.js` que aparece en local es Vercel Analytics, que solo
-existe en Vercel. Las **previews de Vercel están detrás del login** (`vercel.com/sso-api`);
+existe en Vercel. En `/productos` la consola avisa que se precargan 8 imágenes del home (`torre`,
+`camion`, `alfajores`, `giu`, `LOGOS/*`) que la página no usa: no vienen en el HTML servido, las
+inyecta el cliente (probablemente el prefetch de "Inicio"). Es un warning, no un error, y Lighthouse
+ya dio 91 con eso puesto; queda anotado por si se busca exprimir el LCP móvil. Las **previews de Vercel están detrás del login** (`vercel.com/sso-api`);
 producción es pública. Para compartir una preview con Giu o Marco hay que apagar la protección
 de previews en Settings → Deployment Protection.
 
-### Fase D — CMS con roles (Giu / Jime) 🔲
-Arquitectura lista para migrar `PRODUCTS` y `EVENTOS` a datos editables **sin rehacer el
-frontend**. ⚠️ No introducir un CMS antes de definir cuál.
+### Fase D — CMS con roles (Giu / Jime) 🟡
+- [x] Capa de acceso `lib/catalogo.ts` (23-09-2026): todo el frontend lee productos y eventos a
+  través de ella. Migrar a datos editables = reimplementar 5 funciones, sin tocar páginas.
+- [ ] Definir el CMS (Supabase con tablas `productos`/`eventos` + panel propio es el candidato natural:
+  ya hay Auth, RLS y panel). ⚠️ No introducir un CMS antes de definir cuál.
+- [ ] Roles (Giu / Jime), carga de fotos, previsualización.
 
 ### Fase E — Dominio, lanzamiento y capacitación 🔲
 **Dominio: `giuliettpatisserie.com`** (Namecheap, a nombre de Giuliana; confirmado el 23-09-2026).
