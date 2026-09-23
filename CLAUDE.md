@@ -23,7 +23,14 @@ Repo de trabajo: `maap00/giuliett-patisserie` hasta que exista la organización 
 |---|---|
 | **Marco (@maap00)** | Frontend: diseño, componentes, maquetado. Dueño del repo. |
 | **Adrián (@AdrianGarciGeorgel)** | Lidera el desarrollo: backend, formularios, CMS, SEO, deploy. |
-| **Giuliana (Giu)** | La clienta. Dueña de la marca. Usa el panel. |
+| **Giuliana (Giu)** | La clienta. Dueña de la marca y del dominio `giuliettpatisserie.com`. Usa el panel. |
+| **Cecilia Frías** | Ingeniera comercial de Giu. Autora del brief de traspaso de la App de Cocina. |
+
+**Proyecto hermano (otro repo, misma clienta):** la **App de Cocina y Administración**
+(pedidos, producción, stock, finanzas con sueldos confidenciales), hoy en ChatGPT Sites +
+Cloudflare D1, a migrar a Next.js + Supabase + Vercel. Ficha en Notion:
+*Giuliett — App de Cocina y Administración (traspaso)*. Comparte stack y auth con este
+panel; no mezclar repos.
 
 # Notion Base de Operaciones
 
@@ -144,7 +151,7 @@ WhatsApp directo sigue siendo el CTA principal y el formulario es el camino que 
 
 | Capa | Tecnología |
 |---|---|
-| Framework | **Next.js 16.2.6** (App Router, Turbopack, `proxy.ts` en vez de `middleware.ts`) |
+| Framework | **Next.js 16.3.6** (App Router, Turbopack, `proxy.ts` en vez de `middleware.ts`). Mantenerlo al día: `npm audit` en cada sprint |
 | UI | React 19 · TypeScript 5.7.3 |
 | Estilos | **Tailwind CSS v4** (`@theme inline` en `globals.css`) |
 | Componentes | shadcn + `@base-ui/react` · `lucide-react` |
@@ -227,6 +234,7 @@ la configuración se toca en el dashboard, o con Playwright sobre la sesión de 
 | `SUPABASE_URL` | URL del proyecto | servidor |
 | `SUPABASE_PUBLISHABLE_KEY` | clave publicable (`sb_publishable_…`) | panel y `proxy.ts` (sesión) |
 | `SUPABASE_SECRET_KEY` | clave secreta (`sb_secret_…`) | **solo** `lib/supabase/admin.ts` y el script de admins |
+| `NEXT_PUBLIC_SITE_URL` | URL pública del sitio (opcional; el dominio final) | `lib/seo.ts`: canonical, sitemap, OG. Si falta, usa la URL de producción de Vercel |
 
 Ninguna lleva prefijo `NEXT_PUBLIC_`: nada de Supabase viaja al navegador.
 Sin variables, la web sigue funcionando: el formulario muestra un error claro con
@@ -307,12 +315,13 @@ Detectada el 22-09-2026. Lo resuelto se resolvió con el menor impacto posible (
 8. ~~Email decía obligatorio pero no se validaba~~ → resuelto: opcional y validado.
 9. ~~El formulario no registraba nada~~ → resuelto en Fase B.
 10. **Vercel en plan Hobby** (según sus términos, uso no comercial): pasar a **Pro** al lanzar
-    con dominio. Funciones en `iad1` (Washington): conviene `gru1` (São Paulo) — Settings →
-    Functions → Region.
-11. Al automatizar Vercel quedó un **prefijo parcial (25 de 41 caracteres) de la clave
-    secreta** en el registro de la sesión de Claude. No alcanza para usarla, pero por higiene:
-    **rotarla** antes del lanzamiento (Supabase → New secret key → actualizar `.env.local` y
-    Vercel → borrar la vieja).
+    con dominio. Región de Functions: Adrián la cambió a `gru1` (São Paulo) el 23-09-2026, pero el
+    primer deploy posterior seguía reportando `iad1` → **verificar en el próximo deploy** (Vercel →
+    Deployments → el deploy → "Regions"); si sigue en `iad1`, rehacer Settings → Functions → Save.
+11. **Rotación de la clave secreta (22/23-09-2026):** `giuliett_servidor` es la clave en uso
+    (`.env.local` y Vercel, probada). `servidor_web` fue borrada. La secreta `default` de Supabase
+    **no se puede borrar desde el menú de la fila** (Supabase la protege): queda sin usar. Si algún
+    día hace falta rotar de nuevo: New secret key → `.env.local` → Vercel (lo pega Adrián) → borrar.
 
 ---
 
@@ -344,17 +353,48 @@ PR #1: https://github.com/maap00/giuliett-patisserie/pull/1 (pendiente de review
 - [ ] Organización de GitHub `giuliett-patisserie` (esperando el OK de Marco) y, después,
       reconectar el Vercel al repo de la organización.
 
-### Fase C — SEO técnico 🔲
-Metadata por página, OG por producto, `robots.txt` (con `Disallow: /admin`), `sitemap.xml`,
-Schema.org, GA4 / Search Console. Arreglar los 3 `<h1>` de `/eventos`.
+### Fase C — SEO técnico 🟡 (rama `feat/seo-tecnico`, 22-09-2026)
+- [x] `lib/seo.ts` con tests: URL del sitio, metadata, robots, sitemap, Schema.org.
+- [x] Título, descripción, canonical, Open Graph y Twitter en las 6 páginas; `generateMetadata`
+      en la ficha de producto, que pasa a **estática** (`generateStaticParams`).
+- [x] `/robots.txt` (bloquea `/admin` y `/api`) y `/sitemap.xml` (24 URLs).
+- [x] JSON-LD: `Bakery` en todo el sitio; `Product` + `Offer` + `BreadcrumbList` por producto.
+- [x] Tarjetas Open Graph generadas (`app/opengraph-image.tsx` y por producto): JPEG de ~60 KB
+      con foto + nombre + precio y paleta oficial. `sharp` **siempre en la misma versión que
+      trae Next** (hoy 0.35.4): dos versiones conviviendo rompen el build (`colourspace`).
+- [x] **Seguridad (punto 10):** `npm audit` en 0 (Next 16.3.6 cerró una crítica de bypass del
+      proxy); cabeceras `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`,
+      `Permissions-Policy` en todo el sitio y `noindex` + `no-store` en `/admin`
+      (`next.config.mjs`). Sin CSP todavía (JSON-LD inline).
+- [x] Un solo `h1` por página (`/giu` tenía cuatro, `/galeria` ninguno).
+- [x] Test de integridad del catálogo (`test/catalogo.test.ts`).
+- [x] **Lighthouse (build de producción local, móvil 4G simulado):** Home **91 / 91 / 96 / 100**,
+      ficha **91 / 91 / 96 / 100**, desktop **97 / 96 / 96 / 100** (Performance / Accesibilidad /
+      Buenas prácticas / SEO). CLS 0, TBT ≤ 100 ms. Pendiente medir en producción con dominio.
+- [x] Contraste del nav móvil corregido (etiquetas de 10 px: taupe `#9C8065` → `#7D6650`, 5,1:1)
+      y `role="group"` en los indicadores de los tres carruseles (`aria-label` en un `div` sin
+      rol está prohibido). **Accesibilidad Lighthouse: 100** en la home (era 91).
+- [ ] `NEXT_PUBLIC_SITE_URL` en Vercel cuando exista el dominio (hoy usa la URL de producción de
+      Vercel sola).
+- [ ] GA4 / Search Console (necesita el dominio y una cuenta de Google de Giuliett).
+- [ ] Medir Lighthouse en producción y revisar el LCP móvil (3,4 s simulado: hero image).
+
+Notas: el 404 de `/_vercel/insights/script.js` que aparece en local es Vercel Analytics, que solo
+existe en Vercel. Las **previews de Vercel están detrás del login** (`vercel.com/sso-api`);
+producción es pública. Para compartir una preview con Giu o Marco hay que apagar la protección
+de previews en Settings → Deployment Protection.
 
 ### Fase D — CMS con roles (Giu / Jime) 🔲
 Arquitectura lista para migrar `PRODUCTS` y `EVENTOS` a datos editables **sin rehacer el
 frontend**. ⚠️ No introducir un CMS antes de definir cuál.
 
 ### Fase E — Dominio, lanzamiento y capacitación 🔲
-Giuliana ya tiene el dominio contratado en **Namecheap** (dato del 22-09-2026; falta el
-nombre exacto). DNS, SSL, redirects www, Lighthouse en producción, capacitación del panel.
+**Dominio: `giuliettpatisserie.com`** (Namecheap, a nombre de Giuliana; confirmado el 23-09-2026).
+Plan: agregar el dominio al proyecto de Vercel de Adrián (Domains → Add, con `www` redirigiendo
+al apex) → cargar en Namecheap los registros que Vercel indique (A / CNAME) → SSL automático →
+`NEXT_PUBLIC_SITE_URL=https://giuliettpatisserie.com` en Vercel → redeploy → Lighthouse en
+producción → Search Console y GA4 → capacitación del panel. Hasta que el DNS apunte, **no**
+poner el dominio en `NEXT_PUBLIC_SITE_URL` (canonical y sitemap apuntarían a algo que no responde).
 
 ---
 
