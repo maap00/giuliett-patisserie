@@ -1,8 +1,8 @@
-import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Ephesis, Poppins } from 'next/font/google'
 import { GlobalNavigation } from '@/components/giuliett/mobile-bottom-nav'
-import { NOMBRE_SITIO, jsonLdPasteleria, metadataPagina, resolverUrlSitio } from '@/lib/seo'
+import { Analitica } from '@/components/analitica'
+import { NOMBRE_SITIO, jsonLdPasteleria, jsonLdSeguro, metadataPagina, resolverUrlSitio } from '@/lib/seo'
 import './globals.css'
 
 const poppins = Poppins({
@@ -32,7 +32,8 @@ export const metadata: Metadata = {
     descripcion:
       'Pastelería francesa artesanal en Mendoza. Tortas de autor, macarons, galletas personalizadas, boxes y mesas dulces para particulares, eventos y empresas.',
   }),
-  robots: { index: true, follow: true },
+  // Sin `robots`: indexar es el comportamiento por defecto. Fijarlo acá chocaba con el noindex
+  // que Next pone en la 404 (salían las dos metas). El panel fija su noindex en admin/layout.
   icons: {
     icon: [
       { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
@@ -57,10 +58,10 @@ export default function RootLayout({
     <html lang="es-AR" className={`${poppins.variable} ${ephesis.variable} bg-background`}>
       <body className="bg-background pb-[calc(92px+env(safe-area-inset-bottom))] font-sans antialiased md:pb-0">
         {/* Schema.org: la pastelería como negocio local (Google Maps / fichas locales). */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdPasteleria(urlSitio)) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdSeguro(jsonLdPasteleria(urlSitio)) }} />
         <GlobalNavigation />
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === 'production' && <Analitica />}
       </body>
     </html>
   )

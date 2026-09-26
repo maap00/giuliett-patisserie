@@ -52,7 +52,12 @@ Después de cambios significativos, actualizar Notion via MCP.
 Según el **Master Plan v2 de Giuliana**: Giuliett **no elabora Sin TACC en su taller**.
 Las opciones Sin TACC se **tercerizan** a un proveedor habilitado, **según disponibilidad**.
 
-En la web esto se traduce en:
+> ⚠️ **Desde el 26-09-2026 el campo NO está en la web.** Tras el reclamo de la clienta por cambios de
+> diseño, Adrián decidió volver al formulario de Marco tal cual (regla 8), que no tiene el campo
+> "¿Necesitás una opción especial?". El Master Plan v2 lo pide: **Giu tiene que saberlo**. El texto legal y
+> las reglas siguen en el código para cuando vuelva, dentro de un formulario que apruebe Marco.
+
+Cómo estaba (y cómo vuelve, si se reactiva):
 
 - Los **4 formularios** llevan el campo **obligatorio** "¿Necesitás una opción especial?"
   (No, ninguna / Sí, Sin TACC / Sí, otra) con la aclaración legal debajo.
@@ -119,6 +124,12 @@ Core Web Vitals en verde es compromiso contractual de Adrián.
   página precarga (next/image `priority`) **una sola** foto, la principal. Un `<img>` sin `lazy` en
   una página que el menú pre-carga se descarga en TODAS las páginas (React 19 le genera una pista
   de precarga en el RSC y Next la ejecuta al pre-cargar el link).
+- **Fotos: los archivos originales de Marco, tal cual** (`images.unoptimized: true`; decisión de Adrián
+  del 26-09-2026; `test/imagenes.config.test.ts`). Es la **excepción consciente** a esta regla (ver
+  regla 8): en PageSpeed móvil la home bajó de **99 a 75** (LCP 2,3 s → **13,1 s**) y /productos pesa
+  16 MB (LCP **45,9 s**). Alternativa lista si algún día se prioriza la velocidad: sacar `unoptimized` y
+  poner `images.qualities: [100]` (las mismas fotos, achicadas al tamaño de cada pantalla a calidad
+  máxima; el hero baja de 2,1 MB a ~240 KB en un celular). Es decisión de Adrián, no técnica.
 
 ### 4. Git
 
@@ -135,7 +146,9 @@ Core Web Vitals en verde es compromiso contractual de Adrián.
 - Marco sigue siendo **reviewer**. PRs abiertos en su repo, **apilados** (cada uno con base en el
   anterior; se mergean en orden): #1 imágenes → #2 consultas → #3 SEO → #4 capa de datos + fix Atrás
   → #5 recuperación de contraseña + aviso + CSP → #6 código sin uso → #7 un solo h1 → #8 imágenes
-  (performance). El `main` del fork se lleva a la
+  (performance) → #9 fotos originales de Marco + color del menú → #11 seguridad y QA. El #10
+  (carruseles automáticos) se cerró sin mergear por reclamo de la clienta (regla 8). Cada rama
+  vive en los dos remotos: `origin` (cabeza del PR) y `upstream` (base del PR siguiente). El `main` del fork se lleva a la
   punta de la rama más nueva (`git push origin <rama>:main`; si hubo rebase, `--force-with-lease`).
   ⚠️ **Desde el 26-09-2026 el `main` del fork es PRODUCCIÓN:** cada push sale en vivo en
   https://giuliettpatisserie.com. Antes de empujar: `npm test`, `npm run lint` y `npm run build` en verde.
@@ -160,6 +173,27 @@ WhatsApp directo sigue siendo el CTA principal y el formulario es el camino que 
 - Los módulos de reglas (`lib/consultas/*`, `app/api/*`) tienen tests en `test/`.
 - **Prueba de mutación** al cerrar un módulo: romper 5-15 reglas a propósito y confirmar
   que la suite las caza. Una suite que no caza la mutación es decorativa.
+
+### 8. Lo visual es de Marco: no se toca
+
+> ✅ **Regla de Adrián (26-09-2026):** *"no modificar nada de la parte visual que ellos nos enviaron.
+> Sólo trabajamos en lo nuestro."*
+
+- **Es de Marco:** las fotos (archivo, calidad, formato, recorte), colores, tipografías, espaciados,
+  componentes y cómo se ven y se mueven. **Es nuestro:** backend, formularios, panel, SEO, deploy,
+  seguridad y la performance que no cambia lo que se ve.
+- **La referencia de cómo se ve la web es el Vercel de Marco: https://giuliett-patisserie.vercel.app.**
+  Producción tiene que verse igual, página por página. Antes de publicar, comparar las dos.
+- Si algo visual conviene cambiarlo (accesibilidad, velocidad, un pedido de Giu), **no se publica** hasta
+  tener el OK de Marco, y el de Giu si cambia lo que ven los clientes. Avisar en el PR **no alcanza**:
+  se le propone armado y probado en una rama `propuesta/...` sin publicar, y decide él.
+- "Mejorar la calidad" de una foto quiere decir **volver al archivo de Marco**, nunca recomprimirlo.
+- En las fotos esta regla le gana a la regla 3, por decisión de Adrián (ver regla 3, *Fotos*).
+- **Casos del 26-09-2026:** fotos originales y color del menú de Marco restaurados (PR #9). El PR #10 hizo
+  girar solos los carruseles, con botón de pausa y puntitos nuevos; **la clienta reclamó** por los cambios de
+  diseño y el mismo día se volvió al carrusel de Marco, tal cual. El PR #10 se cerró sin mergear. Por el
+  mismo reclamo volvió también **el formulario de Marco tal cual** (decisión de Adrián, PR #11): salieron el
+  selector de recorridos, el campo Sin TACC, la sección "Tu evento" y el formulario de las fichas.
 
 ---
 
@@ -202,10 +236,11 @@ app/
     ├── auth/callback/route.ts    # canjea el enlace del email por una sesión
     └── consultas/[id]/           # detalle + seguimiento
 components/giuliett/
-├── contact-form.tsx              # UN formulario, 4 recorridos, guarda → WhatsApp
+├── contact-form.tsx              # el formulario de Marco, tal cual: manda directo a WhatsApp (desde el 26-09)
 └── …                             # componentes de Marco
 lib/
 ├── consultas/
+│   ├── api-activa.ts             # interruptor: la API de consultas está cerrada salvo CONSULTAS_API_ACTIVA=1
 │   ├── tipos.ts                  # recorridos, estados, opción especial, AVISO_SIN_TACC (sin Zod)
 │   ├── schema.ts                 # validación Zod (servidor)
 │   ├── formularios.ts            # qué campos tiene cada recorrido
@@ -266,6 +301,7 @@ la configuración se toca en el dashboard, o con Playwright sobre la sesión de 
 | `SUPABASE_PUBLISHABLE_KEY` | clave publicable (`sb_publishable_…`) | panel y `proxy.ts` (sesión) |
 | `SUPABASE_SECRET_KEY` | clave secreta (`sb_secret_…`) | **solo** `lib/supabase/admin.ts` y el script de admins |
 | `NEXT_PUBLIC_SITE_URL` | URL pública del sitio (opcional; el dominio final) | `lib/seo.ts`: canonical, sitemap, OG, enlaces de los emails. Si falta, usa la URL de producción de Vercel |
+| `CONSULTAS_API_ACTIVA` | `1` para abrir la API de consultas (opcional; sin ella responde 404) | `lib/consultas/api-activa.ts`. Cerrada desde el 26-09-2026: ningún formulario la usa |
 | `RESEND_API_KEY` | clave de Resend (opcional) | `lib/notificaciones/consulta-nueva.ts`: aviso a Giu por consulta nueva |
 | `AVISOS_EMAIL_DESTINO` | a quién avisar, separado por comas (opcional) | ídem; sin esta y la anterior **no se manda nada** |
 | `AVISOS_EMAIL_REMITENTE` | remitente (opcional; por defecto `Giuliett Web <avisos@giuliettpatisserie.com>`) | ídem; debe ser un dominio verificado en Resend (Fase E) |
@@ -292,6 +328,12 @@ El repo usa **npm** (un solo lockfile, `package-lock.json`). No agregar `pnpm-lo
 ---
 
 ## Cómo funcionan las consultas (Fase B)
+
+> ⏸️ **En pausa desde el 26-09-2026.** La clienta reclamó por cambios de diseño y Adrián decidió que la web
+> quede igual a la de Marco: /contacto usa su formulario, que manda directo a WhatsApp, y salieron la
+> sección "Tu evento" de /eventos y el formulario de las fichas. **Las consultas ya no se registran:** la
+> API responde 404 (salvo `CONSULTAS_API_ACTIVA=1`) y el panel sigue andando, pero no recibe nada nuevo.
+> Todo lo de abajo describe cómo funcionaba y cómo vuelve, si Marco integra los campos en su diseño.
 
 1. El usuario completa uno de los **4 recorridos** (`particular`, `evento`, `empresa`,
    `mayorista`) — un solo componente, `<ContactForm origen=…>`.
@@ -355,8 +397,14 @@ solo sirve para gente del equipo de Supabase.
 
 Detectada el 22-09-2026. Lo resuelto se resolvió con el menor impacto posible (decisión de Adrián).
 
-1. ~~`images: { unoptimized: true }`~~ → **resuelto**: `next/image` optimiza (WebP/AVIF y
-   tamaños por dispositivo). Los `<Image fill sizes=…>` de Marco ya estaban listos para esto.
+1. **`images: { unoptimized: true }` volvió el 26-09-2026, a propósito** (regla 8). La Fase A lo había
+   sacado y había pasado las fotos a WebP q82; Next las volvía a comprimir y se veían empastadas. Hoy se
+   sirven los originales de Marco (costo medido en la regla 3). ⚠️ **Límite de funciones de Vercel Hobby:**
+   con 222 MB de fotos en `public/`, el rastreo de archivos de Next metía toda la carpeta en cada función
+   (`lib/og.ts` lee la foto con una ruta dinámica), Vercel ya no podía agruparlas y el deploy falló con
+   `exceeded_serverless_functions_per_deployment` (máximo 12 en Hobby). Arreglo:
+   `outputFileTracingExcludes: { '*': ['public/**/*'] }` en `next.config.mjs`, con test. Las tarjetas OG
+   leen la foto por HTTP, un respaldo que ya existía en `lib/og.ts`.
 2. ~~`ignoreBuildErrors: true` tapaba 7 errores de tipos~~ → **resuelto**: `SectionLockup`
    acepta `id`; `social-proof.tsx` renderiza `client.text`. La bandera se apagó: el build
    valida tipos.
@@ -367,9 +415,8 @@ Detectada el 22-09-2026. Lo resuelto se resolvió con el menor impacto posible (
    respuesta de Marco en el PR #1: es identidad, no un bug.
 6. ~~`my-project`, dos lockfiles, sin ESLint~~ → **resuelto**: `giuliett-patisserie`, solo
    `package-lock.json`, ESLint instalado con `eslint.config.mjs`.
-7. **Avisos de lint conocidos (6, no frenan):** `setState` dentro de efectos en `reveal.tsx` y
-   `contact-form.tsx` (sincronizan con IntersectionObserver / sessionStorage; corregirlos es
-   refactor); `<img>` en `trusted-clients.tsx` y `why-choose-us.tsx`; `window.location.assign` en
+7. **Avisos de lint conocidos (4, no frenan, todos en componentes de Marco):** `setState` dentro de un efecto en
+   `reveal.tsx`; `<img>` en `trusted-clients.tsx` y `why-choose-us.tsx`; `window.location.assign` en
    `hero-carousel.tsx`. **Código sin uso (punto 1):** limpiado el 23-09-2026 con knip — 10
    componentes huérfanos, `getProductBySlug` y 4 dependencias fuera; quedan como *aviso* los exports
    sin uso de `atoms.tsx`, `line-art.tsx`, `Prose`, `AUDIENCES` y `STEPS` (sistema de diseño de
@@ -387,6 +434,48 @@ Detectada el 22-09-2026. Lo resuelto se resolvió con el menor impacto posible (
     (`.env.local` y Vercel, probada). `servidor_web` fue borrada. La secreta `default` de Supabase
     **no se puede borrar desde el menú de la fila** (Supabase la protege): queda sin usar. Si algún
     día hace falta rotar de nuevo: New secret key → `.env.local` → Vercel (lo pega Adrián) → borrar.
+12. **`/productos` es dinámica (ƒ en el build)**, no estática como pide la regla 3: lee `searchParams` en
+    el servidor para la categoría inicial, igual que en la versión original de Marco. Desde el PR #4,
+    `ProductCatalog` ya deriva la categoría de `useSearchParams()` en el cliente, así que podría pasar a
+    estática con un `<Suspense>`. No es visual; queda para un PR propio (anotado el 26-09-2026).
+
+---
+
+## Auditoría de seguridad y QA (26-09-2026)
+
+Revisión de código independiente, pruebas de ataque de solo lectura contra producción y Supabase, QA en
+WebKit (Safari: iPhone, iPad, escritorio), Chromium móvil y Firefox, 8 tamaños de pantalla y axe.
+**Sin puertas graves:** no hubo bypass de acceso, XSS, inyección SQL, SSRF ni secretos en la historia de git.
+
+**Arreglado (PR #11, sin cambios visuales):** API de consultas cerrada mientras no la use ningún formulario;
+tarjetas OG generadas en el build (antes: cualquier slug gastaba CPU); panel sin textos de la URL, sin error
+500 por `?motivo=__proto__`, recuperación con tiempo parejo y enlace solo a orígenes conocidos; JSON-LD
+escapado; analítica fuera de `/admin`; sin `X-Powered-By`; 404 con un solo `noindex`; `.gitignore` con `.env*`.
+
+**Antes de reabrir la API (`CONSULTAS_API_ACTIVA=1`), arreglar:** `utm` sin límite de claves (una fila de 4 MB
+pasa la validación); cuerpo sin tope de tamaño; aceptar solo `application/json` y `sec-fetch-site: same-origin`
+(hoy otro sitio puede mandar consultas con `text/plain`); límite por IP compartido (hoy vive en la memoria de
+cada instancia); borrador restaurado + envío en menos de 2 s = consulta descartada en silencio; filtrar
+caracteres de control y de dirección de texto.
+
+**Bloqueado por permisos de la sesión (lo decide Adrián):** migración de menor privilegio en Supabase
+(revocar los permisos de tabla de `anon`/`authenticated`, `update` solo de `estado` y `notas_internas`,
+`es_administrador()` sin SECURITY DEFINER con una policy "cada administradora ve su fila"). El clasificador
+frenó escribir la migración y los intentos de inserción de prueba.
+
+**Pendiente de configuración (dashboards, Adrián):** Supabase → largo mínimo de contraseña 6 → 10 o más (ojo:
+no endurecer los caracteres exigidos sin probar el login de Giu); "Secure password change"; borrar la
+secreta `default`; sacar `localhost` de las Redirect URLs; MFA para el panel (opcional, requiere código). Plan
+Free: **pausa el proyecto tras 7 días de poca actividad**, sin backups descargables y sin chequeo de
+contraseñas filtradas → Pro (USD 25/mes) o un chequeo diario. Namecheap → registro DMARC (junto con Resend).
+
+**Para Marco (visual, regla 8):** las secciones con `Reveal` arrancan invisibles hasta que React se activa, y
+con las fotos originales eso tarda: /eventos se ve vacía varios segundos en celulares (medido: 8 s en Chrome y
+13 s en WebKit sobre una conexión rápida); desborde de 27 px en /eventos a 320 px (la palabra "Celebraciones"
+a 30 px); /productos sin botón flotante de WhatsApp; 404 de fábrica de Next en inglés (propuesta lista en la
+rama local `propuesta/404-espanol`); contraste del menú; alt de las fotos de categoría.
+
+**Falta:** probar en un iPhone y un Android reales (punto 8 del checklist).
 
 ---
 
@@ -395,8 +484,12 @@ Detectada el 22-09-2026. Lo resuelto se resolvió con el menor impacto posible (
 ### Fase A — Frontend y performance ✅
 Maquetado de Marco + optimización de imágenes 232MB → 15MB (−93%).
 PR #1: https://github.com/maap00/giuliett-patisserie/pull/1 (pendiente de review de Marco).
+**La optimización de imágenes se revirtió el 26-09-2026 (PR #9):** vuelven las fotos originales de Marco
+(regla 8). Del PR #1 quedan el `CLAUDE.md` y el resto.
 
 ### Fase B — Supabase, 4 formularios, Sin TACC legal, registro y panel 🟡
+> ⏸️ **Desde el 26-09-2026 la web usa el formulario de Marco** (ver *Cómo funcionan las consultas*): el
+> registro, los cuatro recorridos y el campo Sin TACC quedan en el código, apagados hasta que Marco los integre.
 **Código listo y testeado (49 tests + prueba de mutación 15/15 + build verde + Playwright).**
 - [x] Proyecto de Supabase creado: `evpuimzqgkxfwbifnbgf` (São Paulo), 22-09-2026.
 - [x] Migración aplicada (+ `revoke execute … from anon` sobre `es_administrador()`).
@@ -452,6 +545,9 @@ PR #1: https://github.com/maap00/giuliett-patisserie/pull/1 (pendiente de review
 - [x] Contraste del nav móvil corregido (etiquetas de 10 px: taupe `#9C8065` → `#7D6650`, 5,1:1)
       y `role="group"` en los indicadores de los tres carruseles (`aria-label` en un `div` sin
       rol está prohibido). **Accesibilidad Lighthouse: 100** en la home (era 91).
+      ↩️ **El color se revirtió el 26-09-2026 (regla 8, PR #9):** vuelve el `#9C8065` de Marco (3,5:1 en
+      letras de 10 px; AA pide 4,5:1). Queda como sugerencia para Marco. Accesibilidad en PageSpeed: **96**,
+      y es la única falla. El `role="group"` sigue.
 - [x] **Auditoría de rutas sobre el staging (23-09-2026, puntos 2 y 3 del checklist):** todas las
       rutas fijas en 200, `/admin` → `/admin/login` (307), `/no-existe` y `/productos/no-existe` en
       404, `/api/consultas` por GET en 405, las **24 URLs del sitemap en 200**, `?categoria=inventada`
@@ -471,7 +567,17 @@ PR #1: https://github.com/maap00/giuliett-patisserie/pull/1 (pendiente de review
       **home móvil 99 / 100 / 100 / 100** (LCP **2,3 s**, TBT 30 ms, CLS 0, Speed Index 1,5 s) y **ficha
       móvil 98 / 100 / 100 / 100** (LCP 2,5 s). Escritorio (Lighthouse local contra producción): 99.
       Imágenes que baja la home en un celular: 13 (658 KB) → **4 (116 KB)**.
-      **Core Web Vitals en verde en producción.**
+      **Core Web Vitals en verde en producción** (hasta el PR #9).
+- [x] **Después del PR #9 (fotos originales de Marco, 26-09-2026), PageSpeed móvil sobre el dominio:**
+
+  | Página | Rendimiento / Accesib. / Prácticas / SEO | LCP | TBT | CLS |
+  |---|---|---|---|---|
+  | Home | 75 / 96 / 100 / 100 | 13,1 s | 40 ms | 0 |
+  | /productos | 75 / 96 / 100 / 100 | 45,9 s | 80 ms | 0 |
+
+  /productos pesa 16 MB; PageSpeed estima que achicar las fotos ahorraría 15,9 MB. **Core Web Vitals
+  en rojo en móvil (LCP)**: es el costo aceptado de la regla 8. PageSpeed simula un 4G lento; en WiFi
+  se nota mucho menos, pero Google usa esta vara.
 
 Notas: el 404 de `/_vercel/insights/script.js` que aparece en local es Vercel Analytics, que solo
 existe en Vercel. El viejo aviso de consola "*…was preloaded using link preload but not used*" (torre,
@@ -510,6 +616,14 @@ de previews en Settings → Deployment Protection.
   (*Sharing & Transfer → Share Access*, permiso de DNS) y que cambie su contraseña.
 - El registro vence el **20-07-2027**, con renovación automática y privacidad WHOIS activas.
 - "No veo la web nueva en mi PC": es la caché DNS del equipo (TTL de 30 min). `ipconfig /flushdns` o esperar.
+
+**Ajustes que pidió Adrián mirando la web publicada (26-09-2026):**
+- *"Las imágenes perdieron muchísima calidad"*: era la recompresión de la Fase A. Vuelven los archivos
+  originales de Marco, tal cual (PR #9, regla 8).
+- *"Los carruseles no se mueven solos"* y *"aparece una mano en vez del cursor"*: se hicieron girar solos,
+  con pausa, puntitos clickeables y cursor normal (PR #10). **Revertido el mismo día por reclamo de la
+  clienta:** los carruseles volvieron a ser los de Marco, tal cual, sin movimiento automático y con su
+  cursor de "mano". El PR #10 se cerró sin mergear. Ver regla 8.
 
 **Pendiente de la Fase E:**
 - [ ] **Emails del dominio** (aviso por consulta nueva + recuperación de contraseña para cualquier

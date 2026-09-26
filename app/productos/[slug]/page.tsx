@@ -1,13 +1,12 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ContactForm } from '@/components/giuliett/contact-form'
 import { ProductGallery } from '@/components/giuliett/product-gallery'
 import { PrimaryAction } from '@/components/giuliett/atoms'
 import { Section } from '@/components/giuliett/section'
 import { getProductoPorSlug, getProductos } from '@/lib/catalogo'
 import { PRODUCT_CATEGORY_OPTIONS } from '@/lib/products'
 import { waLink } from '@/lib/giuliett'
-import { jsonLdMigas, jsonLdProducto, metadataProducto, resolverUrlSitio } from '@/lib/seo'
+import { jsonLdMigas, jsonLdProducto, jsonLdSeguro, metadataProducto, resolverUrlSitio } from '@/lib/seo'
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>
@@ -55,7 +54,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <main>
       {/* Schema.org: Google entiende que es un producto con precio, y de qué pastelería. */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(datosEstructurados) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdSeguro(datosEstructurados) }} />
       <Section tone="cream" layered={false} className="pb-20 pt-12 md:pb-28 md:pt-20">
         <Link href={productsUrl} className="mb-8 inline-flex min-h-[48px] items-center rounded-sm border border-primary/30 px-5 text-[14px] font-medium text-primary transition-[background-color,border-color] duration-200 hover:border-primary/50 hover:bg-lilac-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
           Volver
@@ -73,19 +72,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <PrimaryAction href={waLink(whatsappMessage)} className="mt-10 w-full max-w-[400px] lg:w-auto">
               Consultar por WhatsApp
             </PrimaryAction>
-
-            {/* Alternativa al WhatsApp directo: deja la consulta registrada. Cerrado por defecto, sin peso visual. */}
-            <details className="group mt-6 w-full max-w-[400px] lg:max-w-[520px]">
-              <summary className="underline-write inline-flex min-h-[44px] cursor-pointer list-none items-center text-[14px] text-primary/70 transition-colors duration-200 hover:text-primary [&::-webkit-details-marker]:hidden">
-                ¿Preferís que te escribamos nosotros? Dejanos tus datos
-              </summary>
-              <div className="mt-8 text-left">
-                <ContactForm
-                  origen="particular"
-                  producto={{ slug: product.slug, nombre: product.name, categoria: category?.label ?? '' }}
-                />
-              </div>
-            </details>
           </article>
         </div>
       </Section>
