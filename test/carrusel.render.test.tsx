@@ -38,8 +38,9 @@ describe('carrusel de la home', () => {
     }
   })
 
-  it('conserva el cursor de Marco', () => {
-    expect(viewport(html)).toMatch(/cursor-grab/)
+  it('sin "mano": sobre la foto se ve el cursor normal, también al arrastrar (pedido de Adrián)', () => {
+    expect(viewport(html)).not.toBe('')
+    expect(viewport(html)).not.toMatch(/cursor-grab/)
   })
 })
 

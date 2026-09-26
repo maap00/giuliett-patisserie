@@ -257,7 +257,7 @@ export function HeroCarousel({
           className={cn(
             'flex snap-x snap-mandatory overflow-x-auto overflow-y-hidden bg-[#BFB4DC]/20',
             'touch-pan-x touch-pan-y select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-            dragging ? 'cursor-grabbing' : 'cursor-grab',
+            // Sin la "mano" (pedido de Adrián): cursor normal sobre la foto, también al arrastrar. El arrastre sigue andando.
             className,
           )}
         >

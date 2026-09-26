@@ -201,8 +201,9 @@ WhatsApp directo sigue siendo el CTA principal y el formulario es el camino que 
   - **Home (26-09-2026, PR #12):** el carrusel avanza solo cada 5 s, **sin botón de pausa**; en la computadora,
     un clic en el cuarto izquierdo o derecho de la pantalla retrocede o avanza (zonas invisibles que en
     pantallas táctiles no existen); y **el texto queda quieto**: logo, bajada, "Ver producto", nombre y
-    puntitos van en una capa fija y solo se desliza la foto (el nombre cambia con un fundido). Reglas en
-    `lib/carrusel.ts`. Galería y eventos siguen como los diseñó Marco.
+    puntitos van en una capa fija y solo se desliza la foto (el nombre cambia con un fundido); y **cursor
+    normal sobre la foto**, sin la "mano" de Marco, también al arrastrar. Reglas en `lib/carrusel.ts`.
+    Galería y eventos siguen como los diseñó Marco.
 
 ---
 
