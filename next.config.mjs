@@ -23,7 +23,21 @@ const politicaContenido = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // El build valida tipos: `npx tsc --noEmit` tiene que estar limpio.
-  // Las imágenes las optimiza next/image (WebP/AVIF y tamaños por dispositivo).
+
+  // Fotos: los archivos ORIGINALES de Marco, tal cual, sin redimensionar ni recomprimir (como en su
+  // versión). Decisión de Adrián del 26-09-2026: "la calidad tiene que ser la misma que nos pasó Marco".
+  // Costo conocido y aceptado: cada foto se descarga entera (el hero pesa 2,1 MB en cualquier celular).
+  images: {
+    unoptimized: true,
+  },
+
+  // Las fotos NO viajan dentro de las funciones del servidor. lib/og.ts las lee con una ruta dinámica y
+  // el rastreo de archivos metía toda public/ (222 MB de originales) en cada función: Vercel ya no podía
+  // agruparlas y el plan Hobby rechaza más de 12 ("exceeded_serverless_functions_per_deployment",
+  // 26-09-2026). Las tarjetas OG leen la foto por HTTP (respaldo que ya existía en lib/og.ts).
+  outputFileTracingExcludes: {
+    '*': ['public/**/*'],
+  },
 
   // Cabeceras de seguridad para todo el sitio (punto 10 del checklist).
   // HSTS lo agrega Vercel solo.
