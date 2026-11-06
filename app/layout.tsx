@@ -22,7 +22,6 @@ export const metadata: Metadata = {
   title: 'Giuliett Pâtisserie · Pastelería francesa en Mendoza',
   description:
     'Pastelería francesa artesanal para empresas, cafeterías y eventos. Cookies con tu marca, macarons, kits y mesas dulces. Mendoza.',
-  generator: 'v0.app',
   openGraph: {
     title: 'Giuliett Pâtisserie · Pastelería francesa en Mendoza',
     description:
@@ -32,11 +31,26 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
-      { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
+      {
+        url: '/Giuliett_favicon_claro_32x32.png',
+        type: 'image/png',
+        sizes: '134x134',
+        media: '(prefers-color-scheme: light)',
+      },
+      {
+        url: '/Giuliett_favicon_oscuro_32x32.png',
+        type: 'image/png',
+        sizes: '134x134',
+        media: '(prefers-color-scheme: dark)',
+      },
     ],
-    apple: '/apple-icon.png',
+    apple: [
+      {
+        url: '/Giuliett_favicon_claro_32x32.png',
+        type: 'image/png',
+        sizes: '134x134',
+      },
+    ],
   },
 }
 
