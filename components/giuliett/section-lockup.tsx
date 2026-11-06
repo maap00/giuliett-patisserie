@@ -12,6 +12,7 @@ const SIZES: Record<Size, { caps: string; script: string; overlap: string }> = {
 }
 
 type Props = {
+  id?: string
   /** Línea superior en mayúsculas tracked. */
   caps: string
   /** Palabra emocional en caligrafía. Monta sobre la mayúscula. */
@@ -31,6 +32,7 @@ type Props = {
  * tensión entre técnica francesa y alma artesanal.
  */
 export function SectionLockup({
+  id,
   caps,
   script,
   size = 'md',
@@ -44,6 +46,7 @@ export function SectionLockup({
 
   return (
     <Tag
+      id={id}
       className={cn(
         'flex flex-col text-balance',
         align === 'center' ? 'items-center text-center' : 'items-start text-left',
